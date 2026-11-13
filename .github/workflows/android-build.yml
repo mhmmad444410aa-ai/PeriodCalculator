@@ -96,7 +96,7 @@ jobs:
             app/build/outputs/apk/offline/release/app-offline-release.apk
           sha256sum app/build/outputs/apk/offline/release/app-offline-release.apk
       - name: Verify signed release APK
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: (startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_dispatch' && inputs.publish_signed_release == true))
         shell: bash
         run: |
           set -euo pipefail
@@ -117,7 +117,7 @@ jobs:
             test -n "$version"
             tag="v${version}"
           fi
-          gh release create "$tag" app/build/outputs/apk/offline/release/app-offline-release.apk \
+          gh release create "$tag" app/build/outputs/apk/offline/release/app-offline-release.apk app/build/outputs/apk/offline/release/SHA256SUMS.txt \
             --title "Period Calculator ${tag}" \
             --notes "Store-candidate APK signed with GitHub Secrets. Validate on real Huawei and AOSP devices before submission."
       - name: Remove keystore file
