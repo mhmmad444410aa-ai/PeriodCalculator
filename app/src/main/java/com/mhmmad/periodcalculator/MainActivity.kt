@@ -21,6 +21,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mhmmad.periodcalculator.data.PeriodViewModel
 import com.mhmmad.periodcalculator.ui.PeriodTheme
 import com.mhmmad.periodcalculator.ui.PeriodRoot
+import com.mhmmad.periodcalculator.ads.AdConsentManager
 
 class MainActivity : AppCompatActivity() {
     private var locked by mutableStateOf(true)
@@ -29,6 +30,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Huawei SDK checks country/region consent requirements at each app launch.
+        // No general advertising on/off dialog is shown.
+        AdConsentManager(this).refresh()
         // Prevent sensitive journal snapshots in recents and screen captures.
         if (!BuildConfig.DEBUG) window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
         vm = androidx.lifecycle.ViewModelProvider(this)[PeriodViewModel::class.java]
