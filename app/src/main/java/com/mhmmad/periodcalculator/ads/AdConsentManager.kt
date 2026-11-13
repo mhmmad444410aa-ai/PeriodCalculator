@@ -17,6 +17,11 @@ class AdConsentManager(context: Context) {
     private val key = booleanPreferencesKey("nonpersonalised_ads_optin")
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     val allowed = appContext.adsPreferences.data.map { it[key] ?: false }
+    private val decided = booleanPreferencesKey("advertising_decision_made")
+    val decisionMade = appContext.adsPreferences.data.map { it[decided] ?: false }
     fun setAllowed(value: Boolean) { scope.launch { reset(value) } }
-    suspend fun reset(value: Boolean = false) { appContext.adsPreferences.edit { it[key] = value } }
+    suspend fun reset(value: Boolean = false) {
+        appContext.adsPreferences.edit { it[key] = value; it[decided] = true }
+        AdConsentBridge.update(appContext, value)
+    }
 }

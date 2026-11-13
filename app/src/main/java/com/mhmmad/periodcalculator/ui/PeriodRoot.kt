@@ -18,6 +18,11 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.mhmmad.periodcalculator.R
 import com.mhmmad.periodcalculator.data.PeriodViewModel
 import com.mhmmad.periodcalculator.ads.BannerAdContainer
+import com.mhmmad.periodcalculator.ads.InterstitialAdController
+import com.mhmmad.periodcalculator.ads.AdConsentManager
+import com.mhmmad.periodcalculator.BuildConfig
+import android.app.Activity
+import androidx.compose.ui.platform.LocalContext
 import com.mhmmad.periodcalculator.export.ExportActions
 
 private val tabs = listOf("home", "calendar", "insights", "settings")
@@ -29,6 +34,11 @@ fun PeriodRoot(vm: PeriodViewModel, onUnlock: () -> Unit, canLock: () -> Boolean
     val currentEntry by nav.currentBackStackEntryAsState()
     val screen = currentEntry?.destination?.route ?: "home"
     val prefs by vm.prefs.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    val adConsent = remember(context) { AdConsentManager(context) }
+    val adAllowed by adConsent.allowed.collectAsState(initial = false)
+    val adChoiceMade by adConsent.decisionMade.collectAsState(initial = true)
+    val interstitial = remember { InterstitialAdController() }
     val periods by vm.periods.collectAsStateWithLifecycle()
     val entries by vm.entries.collectAsStateWithLifecycle()
     var editingId by remember { mutableLongStateOf(0L) }
@@ -42,6 +52,16 @@ fun PeriodRoot(vm: PeriodViewModel, onUnlock: () -> Unit, canLock: () -> Boolean
     }
     val done: () -> Unit = {
         if (!nav.popBackStack()) go("home")
+    }
+    val currentScreen by rememberUpdatedState(screen)
+    LaunchedEffect(screen, adAllowed) {
+        if (screen == "settings" && adAllowed) {
+            (context as? Activity)?.let { activity ->
+                interstitial.maybeShow(activity, screen, adAllowed) {
+                    currentScreen == "settings" && adAllowed
+                }
+            }
+        }
     }
     val titleId = when (screen) {
         "calendar" -> R.string.calendar; "insights" -> R.string.insights
@@ -73,7 +93,9 @@ fun PeriodRoot(vm: PeriodViewModel, onUnlock: () -> Unit, canLock: () -> Boolean
         },
         bottomBar = {
             if (screen in tabs) {
-                NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
+                Column {
+                    if (screen == "home") BannerAdContainer(modifier = Modifier.fillMaxWidth())
+                    NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
                     tabs.forEach { route ->
                         val icon = when(route) {
                             "home" -> Icons.Outlined.Home; "calendar" -> Icons.Outlined.CalendarMonth
@@ -93,6 +115,7 @@ fun PeriodRoot(vm: PeriodViewModel, onUnlock: () -> Unit, canLock: () -> Boolean
                                 unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
                                 unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant)
                         )
+                    }
                     }
                 }
             }
@@ -126,7 +149,24 @@ fun PeriodRoot(vm: PeriodViewModel, onUnlock: () -> Unit, canLock: () -> Boolean
                 composable("privacy") { PrivacyScreen() }
                 composable("consent") { AdvertisingPrivacyScreen() }
             }
-            if (screen == "home") BannerAdContainer(modifier = Modifier.align(androidx.compose.ui.Alignment.BottomCenter))
+
         }
+    }
+    if (BuildConfig.ADS_ENABLED && prefs.onboarded && !adChoiceMade) {
+        AlertDialog(
+            onDismissRequest = {},
+            title = { Text(stringResource(R.string.privacy_ads)) },
+            text = { Text(stringResource(R.string.consent_message)) },
+            confirmButton = {
+                TextButton(onClick = { adConsent.setAllowed(true) }) {
+                    Text(stringResource(R.string.allow_nonpersonalised))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { adConsent.setAllowed(false) }) {
+                    Text(stringResource(R.string.not_now))
+                }
+            }
+        )
     }
 }
