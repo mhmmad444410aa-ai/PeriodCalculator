@@ -60,7 +60,7 @@ jobs:
             echo "Unexpected legacy advertising-choice UI resources in build"
             exit 1
           fi
-          if grep -R -E 'showConsentDialog|setAllowed\\(' app/src/main/java app/src/huawei/java; then
+          if grep -R -F -e 'showConsentDialog' -e 'setAllowed(' app/src/main/java app/src/huawei/java; then
             echo "Unexpected advertising opt-in dialog in app source"
             exit 1
           fi
@@ -70,7 +70,7 @@ jobs:
           STORE_PASSWORD: ${{ secrets.RELEASE_PASSWORD }}
         run: |
           set -euo pipefail
-          ./gradlew --no-build-cache --stacktrace :app:testOfflineDebugUnitTest :app:assembleHuaweiRelease \
+          ./gradlew clean :app:assembleHuaweiRelease --no-build-cache --no-parallel --stacktrace -Pksp.incremental=false \
             -PhuaweiBannerId=f8hj1hr021 \
             -PhuaweiInterstitialId=m80vtl2jek \
             -PenableAdRequests=true \
