@@ -26,7 +26,14 @@ android {
     flavorDimensions += "monetisation"
     productFlavors {
         create("offline") { dimension = "monetisation"; buildConfigField("Boolean", "ADS_ENABLED", "false") }
-        create("huawei") { dimension = "monetisation"; buildConfigField("Boolean", "ADS_ENABLED", "true") }
+        create("huawei") {
+            dimension = "monetisation"
+            buildConfigField("Boolean", "ADS_ENABLED", "true")
+            // Ad placement IDs are public identifiers; no menstrual data enters ad requests.
+            // Keep live ad requests disabled until consent/privacy checks are completed.
+            buildConfigField("String", "BANNER_AD_ID", "\"${providers.gradleProperty("huaweiBannerId").getOrElse("f8hj1hr021")}\"")
+            buildConfigField("String", "INTERSTITIAL_AD_ID", "\"${providers.gradleProperty("huaweiInterstitialId").getOrElse("m80vtl2jek")}\"")
+        }
     }
     buildFeatures { compose = true; buildConfig = true }
     composeOptions { }
