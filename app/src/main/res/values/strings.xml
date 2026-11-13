@@ -130,4 +130,5 @@
     <string name="date_from">Filter start</string>
     <string name="period_reminder">Remind me before an estimated period</string>
     <string name="symptoms_by_cycle">Cramps by recorded cycle</string>
+    <string name="illustrated_edition">Illustrated journey · v1.0.1</string>
 </resources>
