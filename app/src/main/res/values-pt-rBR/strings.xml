@@ -130,4 +130,5 @@
     <string name="date_from">Início do filtro</string>
     <string name="period_reminder">Avisar antes da menstruação estimada</string>
     <string name="symptoms_by_cycle">Cólicas por ciclo registrado</string>
+    <string name="illustrated_edition">Jornada ilustrada · v1.0.1</string>
 </resources>
