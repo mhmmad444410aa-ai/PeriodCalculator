@@ -14,8 +14,8 @@ android {
         applicationId = "com.mhmmad.periodcalculator"
         minSdk = 23
         targetSdk = 36
-        versionCode = 3
-        versionName = "1.0.2"
+        versionCode = 4
+        versionName = "1.0.3"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         resourceConfigurations += listOf("en", "en-rGB", "ar", "pt-rBR")
         // Advertising IDs are not health data. Keep configuration outside sources.
