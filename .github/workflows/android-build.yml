@@ -99,7 +99,7 @@ jobs:
         run: |
           tag="${GITHUB_REF_NAME}"
           if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ]; then
-            version="$(sed -n 's/^[[:space:]]*versionName = "\\([^"]*\\)".*/\\1/p' app/build.gradle.kts | head -n 1)"
+            version="$(grep -m 1 'versionName = ' app/build.gradle.kts | cut -d '"' -f 2)"
             test -n "$version"
             tag="v${version}"
           fi
