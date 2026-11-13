@@ -11,20 +11,18 @@ A first-release upload key has been generated separately in a private ChatGPT co
 
 ### GitHub Actions secrets — values are PRIVATE
 
-Go to [Repository Settings → Secrets and variables → Actions](https://github.com/mhmmad444410aa-ai/PeriodCalculator/settings/secrets/actions) and create four **repository secrets**:
+Go to [Repository Settings → Secrets and variables → Actions](https://github.com/mhmmad444410aa-ai/PeriodCalculator/settings/secrets/actions) and create just two **repository secrets**:
 
 | Secret name | Value |
 |---|---|
 | `RELEASE_KEYSTORE_BASE64` | Exact one-line Base64 representation of the private JKS file |
-| `RELEASE_STORE_PASSWORD` | Private keystore password |
-| `RELEASE_KEY_ALIAS` | `periodcalculator` |
-| `RELEASE_KEY_PASSWORD` | Private key password (same as keystore password in the generated key) |
+| `RELEASE_PASSWORD` | The private password for both the JKS keystore and the signing key |
 
 Do not store these as plain repository variables or include them in screenshots.
 
 ## 2. Build and verify a signed release
 
-Once all four secrets have been saved, open [Actions → Android CI and release](https://github.com/mhmmad444410aa-ai/PeriodCalculator/actions/workflows/android-build.yml), tap **Run workflow**, select the `main` branch and enable **publish_signed_release**, then run. This is the easiest route on a phone. Alternatively, pushing a new `v1.0.1` tag on the verified `main` commit also builds the release. The workflow will:
+Once all two secrets have been saved, open [Actions → Android CI and release](https://github.com/mhmmad444410aa-ai/PeriodCalculator/actions/workflows/android-build.yml), tap **Run workflow**, select the `main` branch and enable **publish_signed_release**, then run. This is the easiest route on a phone. Alternatively, pushing a new `v1.0.1` tag on the verified `main` commit also builds the release. The workflow will:
 - Run offline unit tests and build the debug variant;
 - Restore the JKS privately in the GitHub runner;
 - Build `assembleOfflineRelease` with the private key;
