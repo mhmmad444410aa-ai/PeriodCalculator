@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import com.huawei.hms.ads.AdParam
-import com.huawei.hms.ads.banner.BannerAdSize
+import com.huawei.hms.ads.BannerAdSize
 import com.huawei.hms.ads.banner.BannerView
 
 /** Render only in a permitted, non-entry screen. No health context is passed. */
