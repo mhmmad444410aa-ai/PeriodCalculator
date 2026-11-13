@@ -37,7 +37,12 @@ android {
     }
     packaging { resources.excludes += "/META-INF/{AL2.0,LGPL2.1}" }
     buildTypes {
-        getByName("debug") { isMinifyEnabled = false }
+        getByName("debug") {
+            isMinifyEnabled = false
+            // Isolate experimental builds: preserve data from the previously installed app.
+            applicationIdSuffix = ".preview"
+            versionNameSuffix = "-preview"
+        }
         getByName("release") {
             isMinifyEnabled = false
             val keyStore = providers.gradleProperty("releaseStoreFile").orNull
