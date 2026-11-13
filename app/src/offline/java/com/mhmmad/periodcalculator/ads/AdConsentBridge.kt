@@ -1,6 +1,10 @@
 package com.mhmmad.periodcalculator.ads
 
 import android.content.Context
+
+/** The offline product flavour never requests advertisements. */
 object AdConsentBridge {
-    fun update(context: Context, allowed: Boolean) = Unit
+    fun refresh(context: Context, result: (Boolean) -> Unit) {
+        result(false)
+    }
 }
