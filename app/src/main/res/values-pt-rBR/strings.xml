@@ -79,7 +79,7 @@
     <string name="cancel">Cancelar</string>
     <string name="confirm">Confirmar</string>
     <string name="privacy">Política de privacidade</string>
-    <string name="privacy_text">Sem conta, análises ou sincronização na nuvem. Ciclos e sintomas ficam no armazenamento privado do app. Exportações são feitas apenas para o destino escolhido. Anúncios, quando disponíveis em uma versão separada, podem coletar dados técnicos do aparelho e interação e exigem consentimento separado. Nenhum dado de ciclos ou sintomas é enviado a anunciantes. Você pode apagar seus dados locais a qualquer momento.</string>
+    <string name="privacy_text">Sem conta, análises ou sincronização na nuvem. Ciclos e sintomas ficam no armazenamento privado do app. Exportações são feitas apenas para o destino escolhido. Anúncios não personalizados da Huawei podem tratar dados técnicos do dispositivo e interações. Os anúncios funcionam automaticamente apenas onde não é exigido consentimento adicional ou onde já existe autorização válida. Em outras situações, não são solicitados. Nenhum dado de ciclos ou sintomas é enviado a anunciantes. Você pode apagar seus dados locais a qualquer momento.</string>
     <string name="medical_notice">Apenas informativo. Em caso de dor intensa, sangramento incomum ou outros sintomas preocupantes, procure um profissional de saúde.</string>
     <string name="app_lock">Bloqueio do aplicativo</string>
     <string name="app_lock_desc">Exigir autenticação do aparelho ao abrir o app.</string>
