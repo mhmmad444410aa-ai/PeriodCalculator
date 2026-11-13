@@ -1,9 +1,7 @@
 <resources>
-    <style name="Theme.PeriodCalculator" parent="android:style/Theme.Material.Light.NoActionBar">
-        <item name="android:statusBarColor">#FFF9F7</item>
-        <item name="android:navigationBarColor">#FFF9F7</item>
+    <style name="Theme.PeriodCalculator" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="android:windowLightStatusBar">true</item>
-        <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:windowActionModeOverlay">true</item>
         <item name="android:fontFamily">sans</item>
     </style>
 </resources>
