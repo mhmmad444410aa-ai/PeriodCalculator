@@ -1,1 +1,2 @@
-# Rules will be added as integrations are introduced.
+-keep class com.huawei.openalliance.ad.** { *; }
+-keep class com.huawei.hms.ads.** { *; }
