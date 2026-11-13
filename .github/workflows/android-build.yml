@@ -16,6 +16,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: period-build-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   android:
     runs-on: ubuntu-latest
@@ -27,13 +31,14 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
-      - name: Prepare Android SDK
-        uses: android-actions/setup-android@v3
-      - name: Install Android 36 SDK
+      - name: Install Android 36 SDK from preinstalled commandline tools
         shell: bash
         run: |
-          yes | sdkmanager --licenses >/dev/null || true
-          sdkmanager 'platforms;android-36' 'build-tools;36.0.0' 'platform-tools'
+          set -euo pipefail
+          SDKMANAGER="$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager | sort -V | tail -n 1)"
+          test -x "$SDKMANAGER"
+          yes | "$SDKMANAGER" --licenses >/dev/null || true
+          "$SDKMANAGER" 'platforms;android-36' 'build-tools;36.0.0' 'platform-tools'
       - name: Prepare Gradle 8.13
         uses: gradle/actions/setup-gradle@v4
         with:
