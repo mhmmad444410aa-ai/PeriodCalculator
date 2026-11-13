@@ -57,7 +57,7 @@ jobs:
           STORE_PASSWORD: ${{ secrets.RELEASE_PASSWORD }}
         run: |
           set -euo pipefail
-          ./gradlew --stacktrace :app:testOfflineDebugUnitTest :app:assembleHuaweiRelease \
+          ./gradlew --no-build-cache --stacktrace :app:testOfflineDebugUnitTest :app:assembleHuaweiRelease \
             -PhuaweiBannerId=f8hj1hr021 \
             -PhuaweiInterstitialId=m80vtl2jek \
             -PenableAdRequests=true \
