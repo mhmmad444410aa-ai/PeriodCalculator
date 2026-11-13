@@ -125,6 +125,7 @@ import kotlin.math.roundToInt
     val currentDay = CycleEngine.currentCycleDay(records, today)
     ScreenColumn {
         IllustratedHeader(stringResource(R.string.recent_note), stringResource(R.string.prediction_note), R.drawable.art_wellness)
+        CycleJourneyCard(currentDay, prediction?.averageDays ?: 28)
         if (prediction == null) {
             FloralEmptyState(stringResource(R.string.no_data), stringResource(R.string.add_first), stringResource(R.string.log_period), onPeriod)
         } else {
