@@ -16,6 +16,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.mhmmad.periodcalculator.R
+import com.mhmmad.periodcalculator.BuildConfig
 import com.mhmmad.periodcalculator.data.*
 import com.mhmmad.periodcalculator.reminders.ReminderScheduler
 import com.mhmmad.periodcalculator.export.ExportCommands
@@ -65,6 +66,8 @@ import java.time.LocalDate
             TextButton(onClick = { confirmErase = true }) { Text(stringResource(R.string.erase), color = MaterialTheme.colorScheme.error) }
         }
         Notice(stringResource(R.string.medical_notice))
+        Text("v${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})", style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp))
     }
     if (languages) AlertDialog(onDismissRequest = { languages = false }, title = { Text(stringResource(R.string.language)) },
         text = { Column {

@@ -104,12 +104,6 @@
     <string name="back">Back</string>
     <string name="bleed_legend">Period</string>
     <string name="app_about">About this app</string>
-    <string name="privacy_ads">Advertising privacy</string>
-    <string name="privacy_ads_desc">Advertising is off unless a compliant consent flow is completed. Health log data is never used in ad requests.</string>
-    <string name="consent_message">Optional non-personalised advertising may use device and ad-interaction data. Your cycle records are never shared. You may decline without losing features.</string>
-    <string name="allow_nonpersonalised">Allow non-personalised ads</string>
-    <string name="not_now">Not now</string>
-    <string name="revoke_consent">Withdraw ad consent</string>
     <string name="summary">Summary</string>
     <string name="period_history">Period timeline</string>
     <string name="varying_lengths">Cycle length trend</string>

@@ -104,12 +104,6 @@
     <string name="back">Voltar</string>
     <string name="bleed_legend">Menstruação</string>
     <string name="app_about">Sobre o aplicativo</string>
-    <string name="privacy_ads">Privacidade de anúncios</string>
-    <string name="privacy_ads_desc">Os anúncios ficam desativados sem consentimento válido. Dados de saúde não são usados em pedidos de anúncio.</string>
-    <string name="consent_message">Anúncios não personalizados opcionais podem usar dados técnicos do aparelho e interações. Seus ciclos nunca são compartilhados. Você pode recusar sem perder recursos.</string>
-    <string name="allow_nonpersonalised">Permitir anúncios não personalizados</string>
-    <string name="not_now">Agora não</string>
-    <string name="revoke_consent">Retirar consentimento para anúncios</string>
     <string name="summary">Resumo</string>
     <string name="period_history">Linha do tempo dos ciclos</string>
     <string name="varying_lengths">Tendência da duração do ciclo</string>

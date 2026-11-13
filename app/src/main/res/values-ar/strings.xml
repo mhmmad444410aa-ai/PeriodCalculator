@@ -104,12 +104,6 @@
     <string name="back">رجوع</string>
     <string name="bleed_legend">دورة</string>
     <string name="app_about">عن التطبيق</string>
-    <string name="privacy_ads">خصوصية الإعلانات</string>
-    <string name="privacy_ads_desc">لا تُعرض الإعلانات إلا بعد إتمام موافقة قانونية مناسبة، ولا تُستخدم السجلات الصحية في طلباتها.</string>
-    <string name="consent_message">قد تستخدم الإعلانات الاختيارية غير المخصصة بيانات الجهاز والتفاعل الإعلاني. لا تُشارك سجلات دورتك أبدًا. يمكنك الرفض دون فقد الميزات.</string>
-    <string name="allow_nonpersonalised">السماح بإعلانات غير مخصصة</string>
-    <string name="not_now">ليس الآن</string>
-    <string name="revoke_consent">سحب موافقة الإعلانات</string>
     <string name="summary">ملخص</string>
     <string name="period_history">الخط الزمني للدورات</string>
     <string name="varying_lengths">تغير طول الدورة</string>

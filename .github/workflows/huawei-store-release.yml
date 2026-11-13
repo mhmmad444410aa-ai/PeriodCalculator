@@ -51,6 +51,19 @@ jobs:
           fi
           printf '%s' "$STORE_BASE64" | base64 --decode > "$RUNNER_TEMP/periodcalculator-release.jks"
           test -s "$RUNNER_TEMP/periodcalculator-release.jks"
+      - name: Check ad choice UI is absent
+        shell: bash
+        run: |
+          set -euo pipefail
+          if grep -R -E '(privacy_ads|privacy_ads_desc|consent_message|allow_nonpersonalised|revoke_consent)' \
+            app/src/main/java app/src/main/res; then
+            echo "Unexpected legacy advertising-choice UI resources in build"
+            exit 1
+          fi
+          if grep -R -E 'showConsentDialog|setAllowed\\(' app/src/main/java app/src/huawei/java; then
+            echo "Unexpected advertising opt-in dialog in app source"
+            exit 1
+          fi
       - name: Build production Huawei Ads APK (three languages)
         shell: bash
         env:
@@ -71,6 +84,9 @@ jobs:
           set -euo pipefail
           cd app/build/outputs/apk/huawei/release/
           test -s app-huawei-release.apk
+          "$ANDROID_HOME/build-tools/36.0.0/aapt" dump badging app-huawei-release.apk | grep -F "versionName='1.0.4'"
+          "$ANDROID_HOME/build-tools/36.0.0/aapt" dump badging app-huawei-release.apk | grep -F "versionCode='5'"
+
           "$ANDROID_HOME/build-tools/36.0.0/apksigner" verify --verbose --print-certs app-huawei-release.apk | tee signing-verify.txt
           grep -qi '5df6b02a6769c3c200472e391b939700dcb3b00d13749ca7e7d30ec989f9b634' signing-verify.txt
           sha256sum app-huawei-release.apk > SHA256SUMS.txt
@@ -80,7 +96,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          tag="v1.0.3"
+          tag="v1.0.4"
           if gh release view "$tag" >/dev/null 2>&1; then
             echo "Release $tag already exists; refusing to overwrite its signed APK"
             exit 1
@@ -88,7 +104,7 @@ jobs:
           gh release create "$tag" \
             app/build/outputs/apk/huawei/release/app-huawei-release.apk \
             app/build/outputs/apk/huawei/release/SHA256SUMS.txt \
-            --title "Period Calculator v1.0.2 — Huawei Ads" \
+            --title "Period Calculator v1.0.4 — Huawei Ads" \
             --notes "Signed Huawei Ads build with banner f8hj1hr021 and interstitial m80vtl2jek. No user-facing ads on/off setting or generic opt-in prompt. Non-personalised ads are requested only after Huawei regional consent verification permits them; ads stay off where required consent is missing or status is unknown. This is a store candidate; validate on real devices before AppGallery submission."
       - name: Delete sensitive keystore from runner
         if: always()
