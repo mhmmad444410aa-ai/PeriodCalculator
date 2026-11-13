@@ -10,7 +10,7 @@ val Blush = Color(0xFFF7B2C4)
 val Lavender = Color(0xFFCDBAF5)
 val Ivory = Color(0xFFFFF9F7)
 val Plum = Color(0xFF38253F)
-val DarkBackground = Color(0xFF1D1724)
+val DarkBackground = Color(0xFF38253F)
 private val lightPalette = lightColorScheme(
     primary = Rose, onPrimary = Color.White, primaryContainer = Color(0xFFFFDDE8), onPrimaryContainer = Plum, secondary = Color(0xFF77549A),
     tertiary = Color(0xFF9B6D65), background = Ivory,
@@ -19,8 +19,8 @@ private val lightPalette = lightColorScheme(
 )
 private val darkPalette = darkColorScheme(
     primary = Blush, onPrimary = DarkBackground, primaryContainer = Color(0xFF61334E), onPrimaryContainer = Color.White, secondary = Lavender,
-    background = DarkBackground, surface = Color(0xFF2F2538),
-    surfaceVariant = Color(0xFF4C3A51), onBackground = Color(0xFFFFF4F6),
+    background = DarkBackground, surface = Color(0xFF4D3558),
+    surfaceVariant = Color(0xFF64466A), onBackground = Color(0xFFFFF4F6),
     onSurface = Color(0xFFFFF4F6)
 )
 @Composable
