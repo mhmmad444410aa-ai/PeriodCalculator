@@ -24,7 +24,7 @@ Do not store these as plain repository variables or include them in screenshots.
 
 ## 2. Build and verify a signed release
 
-Once the four secrets have been saved, create and push a **new** tag `v1.0.1` on the verified `main` commit. The [Android CI and release workflow](.github/workflows/android-build.yml) will:
+Once all four secrets have been saved, open [Actions → Android CI and release](https://github.com/mhmmad444410aa-ai/PeriodCalculator/actions/workflows/android-build.yml), tap **Run workflow**, select the `main` branch and enable **publish_signed_release**, then run. This is the easiest route on a phone. Alternatively, pushing a new `v1.0.1` tag on the verified `main` commit also builds the release. The workflow will:
 - Run offline unit tests and build the debug variant;
 - Restore the JKS privately in the GitHub runner;
 - Build `assembleOfflineRelease` with the private key;
