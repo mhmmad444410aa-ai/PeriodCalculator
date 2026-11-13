@@ -47,7 +47,7 @@ jobs:
       - name: Test APK exists
         run: test -s app/build/outputs/apk/offline/debug/app-offline-debug.apk
       - name: Publish debug PREVIEW to GitHub Releases
-        if: github.event_name == 'workflow_dispatch' && inputs.publish_preview == true
+        if: (github.event_name == 'workflow_dispatch' && inputs.publish_preview == true) || (github.event_name == 'push' && github.ref == 'refs/heads/main')
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
