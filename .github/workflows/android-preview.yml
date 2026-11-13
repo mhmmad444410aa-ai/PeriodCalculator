@@ -1,0 +1,37 @@
+name: Android Preview Build
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Install Android SDK 36
+        uses: android-actions/setup-android@v3
+      - name: Accept SDK licenses and packages
+        run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
+      - name: Configure Gradle 8.13
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.13'
+      - name: Unit tests and debug APK
+        run: gradle --no-daemon :app:testDebugUnitTest :app:assembleDebug --stacktrace
+      - name: Publish debug preview as prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "preview-${{ github.run_number }}" app/build/outputs/apk/debug/app-debug.apk --prerelease --title "Debug preview ${{ github.run_number }}" --notes "Unverified development build for testing only. Not a store-ready signed release."
