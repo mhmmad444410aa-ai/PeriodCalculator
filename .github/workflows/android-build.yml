@@ -56,7 +56,7 @@ jobs:
       - name: Test APK exists
         run: test -s app/build/outputs/apk/offline/debug/app-offline-debug.apk
       - name: Publish debug PREVIEW to GitHub Releases
-        if: (github.event_name == 'workflow_dispatch' && inputs.publish_preview == true) || (github.event_name == 'push' && github.ref == 'refs/heads/main')
+        if: (github.event_name == 'workflow_dispatch' && inputs.publish_preview == true) || (github.event_name == 'push' && github.ref == 'refs/heads/main' && !contains(github.event.head_commit.message, '[publish-store-candidate-1.0.1]'))
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -65,7 +65,7 @@ jobs:
             --title "DEBUG preview $tag (not store-ready)" --prerelease \
             --notes "Unsigned for store publication. Debug APK for testing only. This build has no Huawei ad SDK."
       - name: Restore signing keystore from GitHub Secrets
-        if: (startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_dispatch' && inputs.publish_signed_release == true))
+        if: (startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_dispatch' && inputs.publish_signed_release == true) || (github.event_name == 'push' && github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '[publish-store-candidate-1.0.1]')))
         env:
           STORE_BASE64: ${{ secrets.RELEASE_KEYSTORE_BASE64 }}
           STORE_PASSWORD: ${{ secrets.RELEASE_PASSWORD }}
@@ -80,7 +80,7 @@ jobs:
           printf '%s' "$STORE_BASE64" | base64 --decode > "$RUNNER_TEMP/release.jks"
           test -s "$RUNNER_TEMP/release.jks"
       - name: Build signed offline release APK
-        if: (startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_dispatch' && inputs.publish_signed_release == true))
+        if: (startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_dispatch' && inputs.publish_signed_release == true) || (github.event_name == 'push' && github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '[publish-store-candidate-1.0.1]')))
         env:
           STORE_PASSWORD: ${{ secrets.RELEASE_PASSWORD }}
           KEY_ALIAS: periodcalculator
@@ -96,7 +96,7 @@ jobs:
             app/build/outputs/apk/offline/release/app-offline-release.apk
           sha256sum app/build/outputs/apk/offline/release/app-offline-release.apk
       - name: Verify signed release APK
-        if: (startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_dispatch' && inputs.publish_signed_release == true))
+        if: (startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_dispatch' && inputs.publish_signed_release == true) || (github.event_name == 'push' && github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '[publish-store-candidate-1.0.1]')))
         shell: bash
         run: |
           set -euo pipefail
@@ -107,12 +107,12 @@ jobs:
           "$apksigner" verify --verbose --print-certs "$apk"
           sha256sum "$apk" > app/build/outputs/apk/offline/release/SHA256SUMS.txt
       - name: Publish signed APK to GitHub Release
-        if: (startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_dispatch' && inputs.publish_signed_release == true))
+        if: (startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_dispatch' && inputs.publish_signed_release == true) || (github.event_name == 'push' && github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '[publish-store-candidate-1.0.1]')))
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           tag="${GITHUB_REF_NAME}"
-          if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ]; then
+          if [ "$GITHUB_REF" = "refs/heads/main" ]; then
             version="$(grep -m 1 'versionName = ' app/build.gradle.kts | cut -d '"' -f 2)"
             test -n "$version"
             tag="v${version}"
