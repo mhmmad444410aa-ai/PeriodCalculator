@@ -1,0 +1,81 @@
+name: Build Period Calculator trial APK from ZIP
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'PeriodCalculator-Illustrated-Edition.zip'
+      - '.github/workflows/preview-from-zip.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Check trial source ZIP is present
+        id: source
+        shell: bash
+        run: |
+          if [ -s PeriodCalculator-Illustrated-Edition.zip ]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Upload PeriodCalculator-Illustrated-Edition.zip to the repository root, then commit."
+          fi
+      - name: Extract Android project
+        if: steps.source.outputs.exists == 'true'
+        run: |
+          mkdir -p project
+          unzip -q -o PeriodCalculator-Illustrated-Edition.zip -d project
+          test -f project/app/build.gradle.kts
+          test -f project/settings.gradle.kts
+      - name: Set up Java 17
+        if: steps.source.outputs.exists == 'true'
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Set up Android SDK
+        if: steps.source.outputs.exists == 'true'
+        uses: android-actions/setup-android@v3
+      - name: Install Android SDK API 36
+        if: steps.source.outputs.exists == 'true'
+        run: |
+          yes | sdkmanager --licenses >/dev/null || true
+          sdkmanager "platforms;android-36" "build-tools;36.0.0" "platform-tools"
+      - name: Set up Gradle 8.13
+        if: steps.source.outputs.exists == 'true'
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.13'
+      - name: Generate official Gradle wrapper
+        if: steps.source.outputs.exists == 'true'
+        working-directory: project
+        run: gradle wrapper --gradle-version 8.13 --distribution-type bin
+      - name: Verify and run unit tests
+        if: steps.source.outputs.exists == 'true'
+        working-directory: project
+        run: |
+          chmod +x ./gradlew
+          ./gradlew --stacktrace --warning-mode all :app:testOfflineDebugUnitTest
+      - name: Build trial APK (NO Huawei ads)
+        if: steps.source.outputs.exists == 'true'
+        working-directory: project
+        run: ./gradlew --stacktrace --warning-mode all :app:assembleOfflineDebug
+      - name: Verify trial APK
+        if: steps.source.outputs.exists == 'true'
+        run: test -s project/app/build/outputs/apk/offline/debug/app-offline-debug.apk
+      - name: Publish downloadable trial APK to GitHub Releases
+        if: steps.source.outputs.exists == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          tag="trial-${GITHUB_RUN_NUMBER}"
+          gh release create "$tag"             project/app/build/outputs/apk/offline/debug/app-offline-debug.apk             --title "Period Calculator - Trial $tag"             --prerelease             --notes "DEBUG APK for device testing. Not a signed store release. Offline flavor: Huawei advertising disabled."
