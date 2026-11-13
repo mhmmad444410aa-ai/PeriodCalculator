@@ -20,7 +20,6 @@ import com.mhmmad.periodcalculator.data.PeriodViewModel
 import com.mhmmad.periodcalculator.ads.BannerAdContainer
 import com.mhmmad.periodcalculator.ads.InterstitialAdController
 import com.mhmmad.periodcalculator.ads.AdConsentManager
-import com.mhmmad.periodcalculator.BuildConfig
 import android.app.Activity
 import androidx.compose.ui.platform.LocalContext
 import com.mhmmad.periodcalculator.export.ExportActions
@@ -37,7 +36,6 @@ fun PeriodRoot(vm: PeriodViewModel, onUnlock: () -> Unit, canLock: () -> Boolean
     val context = LocalContext.current
     val adConsent = remember(context) { AdConsentManager(context) }
     val adAllowed by adConsent.allowed.collectAsState(initial = false)
-    val adChoiceMade by adConsent.decisionMade.collectAsState(initial = true)
     val interstitial = remember { InterstitialAdController() }
     val periods by vm.periods.collectAsStateWithLifecycle()
     val entries by vm.entries.collectAsStateWithLifecycle()
@@ -68,7 +66,7 @@ fun PeriodRoot(vm: PeriodViewModel, onUnlock: () -> Unit, canLock: () -> Boolean
         "settings" -> R.string.settings; "period" -> R.string.log_period
         "symptoms" -> R.string.log_symptoms; "fertility" -> R.string.fertility
         "history" -> R.string.history; "reminders" -> R.string.reminders
-        "privacy" -> R.string.privacy; "consent" -> R.string.privacy_ads
+        "privacy" -> R.string.privacy
         else -> R.string.app_name
     }
     Scaffold(
@@ -138,7 +136,7 @@ fun PeriodRoot(vm: PeriodViewModel, onUnlock: () -> Unit, canLock: () -> Boolean
                 composable("insights") { InsightsScreen(periods, entries, vm, onHistory = { go("history") },
                     onFertility = { go("fertility") }) }
                 composable("settings") { SettingsScreen(vm, prefs, canLock, onPrivacy = { go("privacy") },
-                    onReminders = { go("reminders") }, onHistory = { go("history") }, onConsent = { go("consent") }) }
+                    onReminders = { go("reminders") }, onHistory = { go("history") }) }
                 composable("period") { PeriodEditor(periods.firstOrNull { it.id == editingId }, vm, done) }
                 composable("symptoms") { SymptomEditor(entries.firstOrNull { it.epochDay == editingDay }, editingDay, vm, done) }
                 composable("fertility") { FertilityScreen(vm) }
@@ -147,26 +145,8 @@ fun PeriodRoot(vm: PeriodViewModel, onUnlock: () -> Unit, canLock: () -> Boolean
                     HistoryScreen(periods, entries, actions, onEdit = { id -> editingId = id; go("period") })
                 } }
                 composable("privacy") { PrivacyScreen() }
-                composable("consent") { AdvertisingPrivacyScreen() }
             }
 
         }
-    }
-    if (BuildConfig.ADS_ENABLED && prefs.onboarded && !adChoiceMade) {
-        AlertDialog(
-            onDismissRequest = {},
-            title = { Text(stringResource(R.string.privacy_ads)) },
-            text = { Text(stringResource(R.string.consent_message)) },
-            confirmButton = {
-                TextButton(onClick = { adConsent.setAllowed(true) }) {
-                    Text(stringResource(R.string.allow_nonpersonalised))
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { adConsent.setAllowed(false) }) {
-                    Text(stringResource(R.string.not_now))
-                }
-            }
-        )
     }
 }
