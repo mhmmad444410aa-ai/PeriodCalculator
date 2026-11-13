@@ -80,7 +80,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          tag="v1.0.2"
+          tag="v1.0.3"
           if gh release view "$tag" >/dev/null 2>&1; then
             echo "Release $tag already exists; refusing to overwrite its signed APK"
             exit 1
@@ -89,7 +89,7 @@ jobs:
             app/build/outputs/apk/huawei/release/app-huawei-release.apk \
             app/build/outputs/apk/huawei/release/SHA256SUMS.txt \
             --title "Period Calculator v1.0.2 — Huawei Ads" \
-            --notes "Signed Huawei Ads build with banner f8hj1hr021 and interstitial m80vtl2jek. Advertising requests are limited to non-personalised and begin only after the user actively opts in. This is a store candidate; validate Huawei ad fill, consent, privacy disclosures, and app behavior before AppGallery submission."
+            --notes "Signed Huawei Ads build with banner f8hj1hr021 and interstitial m80vtl2jek. No user-facing ads on/off setting or generic opt-in prompt. Non-personalised ads are requested only after Huawei regional consent verification permits them; ads stay off where required consent is missing or status is unknown. This is a store candidate; validate on real devices before AppGallery submission."
       - name: Delete sensitive keystore from runner
         if: always()
         run: rm -f "$RUNNER_TEMP/periodcalculator-release.jks"
