@@ -17,13 +17,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.mhmmad.periodcalculator.R
 import com.mhmmad.periodcalculator.data.*
-import com.mhmmad.periodcalculator.ads.AdConsentManager
 import com.mhmmad.periodcalculator.reminders.ReminderScheduler
 import com.mhmmad.periodcalculator.export.ExportCommands
 import java.time.LocalDate
 
 @Composable fun SettingsScreen(vm: PeriodViewModel, prefs: UserPreferences, canLock: () -> Boolean,
-                               onPrivacy: () -> Unit, onReminders: () -> Unit, onHistory: () -> Unit, onConsent: () -> Unit) {
+                               onPrivacy: () -> Unit, onReminders: () -> Unit, onHistory: () -> Unit) {
     val context = LocalContext.current
     var languages by remember { mutableStateOf(false) }
     var themes by remember { mutableStateOf(false) }
@@ -50,7 +49,6 @@ import java.time.LocalDate
             SettingRow(stringResource(R.string.reminders), Icons.Outlined.Notifications, onReminders)
             SettingRow(stringResource(R.string.history), Icons.Outlined.FolderOpen, onHistory)
             SettingRow(stringResource(R.string.privacy), Icons.Outlined.Policy, onPrivacy)
-            if (com.mhmmad.periodcalculator.BuildConfig.ADS_ENABLED) SettingRow(stringResource(R.string.privacy_ads), Icons.Outlined.Shield, onConsent)
         }
         Panel {
             Subheading(stringResource(R.string.app_lock))
@@ -170,21 +168,3 @@ import java.time.LocalDate
     }
 }
 
-@Composable fun AdvertisingPrivacyScreen() {
-    val context = LocalContext.current
-    val consent = remember { AdConsentManager(context) }
-    val choice by consent.allowed.collectAsState(initial = false)
-    ScreenColumn {
-        IllustratedHeader(stringResource(R.string.privacy_ads), stringResource(R.string.local_data), R.drawable.art_privacy)
-        Notice(stringResource(R.string.consent_message))
-        Panel {
-            Subheading(stringResource(R.string.privacy_ads))
-            Text(stringResource(R.string.privacy_ads_desc))
-            Spacer(Modifier.height(12.dp))
-            Button(onClick = { consent.setAllowed(true) }, modifier = Modifier.fillMaxWidth()) { Text(stringResource(R.string.allow_nonpersonalised)) }
-            OutlinedButton(onClick = { consent.setAllowed(false) }, modifier = Modifier.fillMaxWidth()) {
-                Text(if (choice) stringResource(R.string.revoke_consent) else stringResource(R.string.not_now))
-            }
-        }
-    }
-}
