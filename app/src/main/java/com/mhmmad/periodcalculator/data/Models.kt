@@ -63,7 +63,7 @@ data class UserPreferences(
     val onboarded: Boolean = false,
     val cycleLength: Int = 28,
     val bleedingLength: Int = 5,
-    val theme: String = "system",
+    val theme: String = "light",
     val reminder: Boolean = false,
     val lock: Boolean = false,
     val periodReminder: Boolean = false
@@ -81,7 +81,7 @@ class PreferenceRepository(private val context: Context) {
     }
     val settings: Flow<UserPreferences> = context.periodDataStore.data.map {
         UserPreferences(it[Keys.onboarded] ?: false, it[Keys.cycle] ?: 28,
-            it[Keys.bleeding] ?: 5, it[Keys.theme] ?: "system", it[Keys.reminder] ?: false, it[Keys.lock] ?: false, it[Keys.periodReminder] ?: false)
+            it[Keys.bleeding] ?: 5, it[Keys.theme] ?: "light", it[Keys.reminder] ?: false, it[Keys.lock] ?: false, it[Keys.periodReminder] ?: false)
     }
     suspend fun finishSetup(cycle: Int, bleeding: Int) = context.periodDataStore.edit {
         it[Keys.onboarded] = true; it[Keys.cycle] = cycle.coerceIn(15, 90); it[Keys.bleeding] = bleeding.coerceIn(1, 14)
