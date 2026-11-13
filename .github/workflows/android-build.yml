@@ -68,13 +68,13 @@ jobs:
         if: (startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_dispatch' && inputs.publish_signed_release == true))
         env:
           STORE_BASE64: ${{ secrets.RELEASE_KEYSTORE_BASE64 }}
-          STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
-          KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
+          STORE_PASSWORD: ${{ secrets.RELEASE_PASSWORD }}
+          KEY_ALIAS: periodcalculator
+          KEY_PASSWORD: ${{ secrets.RELEASE_PASSWORD }}
         shell: bash
         run: |
           set -euo pipefail
-          for name in STORE_BASE64 STORE_PASSWORD KEY_ALIAS KEY_PASSWORD; do
+          for name in STORE_BASE64 STORE_PASSWORD; do
             if [ -z "${!name}" ]; then echo "ERROR: missing signing secret $name"; exit 1; fi
           done
           printf '%s' "$STORE_BASE64" | base64 --decode > "$RUNNER_TEMP/release.jks"
@@ -82,9 +82,9 @@ jobs:
       - name: Build signed offline release APK
         if: (startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_dispatch' && inputs.publish_signed_release == true))
         env:
-          STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
-          KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
+          STORE_PASSWORD: ${{ secrets.RELEASE_PASSWORD }}
+          KEY_ALIAS: periodcalculator
+          KEY_PASSWORD: ${{ secrets.RELEASE_PASSWORD }}
         run: |
           ./gradlew --stacktrace :app:assembleOfflineRelease \
             -PreleaseStoreFile="$RUNNER_TEMP/release.jks" \
