@@ -1,28 +1,44 @@
 package com.mhmmad.periodcalculator.ads
 
 import android.content.Context
+import java.lang.reflect.Proxy
 
 /**
- * Keep explicit first-run permission and revocation in the app-private DataStore.
- * Huawei ad requests are configured for NON_PERSONALIZED only in AdManager.
+ * Query Huawei's regional consent state on each launch.
+ * Never equate a missing SDK or callback failure with legal permission.
  *
- * Some Ads Prime distributions do not expose the standalone Consent classes
- * on the app's compilation classpath. Use the optional bridge if available,
- * otherwise do not make up a consent state in the vendor SDK.
+ * A normal app advertising switch does not exist. For sensitive jurisdictions
+ * where consent is required but not already present, this build shows NO ads.
  */
 object AdConsentBridge {
-    fun update(context: Context, allowed: Boolean) {
-        runCatching {
-            val type = Class.forName("com.huawei.hms.ads.consent.Consent")
-            val statusType = Class.forName("com.huawei.hms.ads.consent.ConsentStatus")
-            val consent = type.getMethod("getInstance", Context::class.java)
+    fun refresh(context: Context, result: (Boolean) -> Unit) {
+        try {
+            val consentType = Class.forName("com.huawei.hms.ads.consent.Consent")
+            val listenerType = Class.forName("com.huawei.hms.ads.consent.ConsentUpdateListener")
+            val instance = consentType.getMethod("getInstance", Context::class.java)
                 .invoke(null, context.applicationContext)
-            val selected = statusType.enumConstants?.firstOrNull {
-                (it as? Enum<*>)?.name == if (allowed) "NON_PERSONALIZED" else "UNKNOWN"
+            if (instance == null) { result(false); return }
+
+            val listener = Proxy.newProxyInstance(
+                listenerType.classLoader,
+                arrayOf(listenerType)
+            ) { _, method, args ->
+                when (method.name) {
+                    "onSuccess" -> {
+                        // Huawei ConsentUpdateListener.onSuccess(status, needConsent, providers)
+                        val needConsent = args?.getOrNull(1) as? Boolean ?: true
+                        val status = args?.getOrNull(0)?.toString()?.uppercase() ?: "UNKNOWN"
+                        val permissionExists = status == "PERSONALIZED" || status == "NON_PERSONALIZED"
+                        result(!needConsent || permissionExists)
+                    }
+                    "onFail" -> result(false)
+                }
+                null
             }
-            if (consent != null && selected != null) {
-                type.getMethod("setConsentStatus", statusType).invoke(consent, selected)
-            }
+            consentType.getMethod("requestConsentUpdate", listenerType).invoke(instance, listener)
+        } catch (_: Throwable) {
+            // Consent SDK unavailable or changed. Don't make a guess from locale/SIM.
+            result(false)
         }
     }
 }
