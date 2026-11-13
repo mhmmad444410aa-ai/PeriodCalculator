@@ -79,7 +79,7 @@
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
     <string name="privacy">Privacy policy</string>
-    <string name="privacy_text">No account, analytics or cloud sync. Periods and symptoms remain in private app storage. User-initiated exports go only to a destination you choose. Ads, if enabled in a separate build, can collect technical device and ad interaction data and require separate consent. No period or symptom details are sent to advertisers. You can delete your local data at any time.</string>
+    <string name="privacy_text">No account, analytics or cloud sync. Periods and symptoms remain in private app storage. User-initiated exports go only to a destination you choose. Non-personalised Huawei advertisements can use technical device and ad-interaction data. Ads run automatically only where consent is not required or already valid; otherwise they remain off. No period or symptom details are sent to advertisers. You can delete your local data at any time.</string>
     <string name="medical_notice">For information only. If you have severe pain, unusually heavy bleeding or other worrying symptoms, contact a qualified clinician.</string>
     <string name="app_lock">App lock</string>
     <string name="app_lock_desc">Require device authentication when opening the app.</string>
