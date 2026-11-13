@@ -1,6 +1,7 @@
 package com.mhmmad.periodcalculator.ads
 
 import android.content.Context
+import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.mhmmad.periodcalculator.BuildConfig
@@ -29,6 +30,11 @@ class AdConsentManager(context: Context) {
     val allowed = combine(appContext.adsPreferences.data, sdkPermitsAds) { prefs, sdkAllowed ->
         val earlierRefusal = prefs[decisionKey] == true && prefs[optInKey] == false
         BuildConfig.ADS_ENABLED && sdkAllowed && !earlierRefusal
+    }
+
+    suspend fun reset() {
+        appContext.adsPreferences.edit { it.clear() }
+        sdkPermitsAds.value = false
     }
 
     fun refresh() {
