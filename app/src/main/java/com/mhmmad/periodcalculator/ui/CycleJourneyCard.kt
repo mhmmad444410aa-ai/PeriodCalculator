@@ -27,7 +27,7 @@ import com.mhmmad.periodcalculator.R
  * All art is bundled locally. Markers are explanatory only, never medical predictions.
  */
 @Composable
-fun CycleJourneyCard(cycleDay: Int?, averageDays: Int, modifier: Modifier = Modifier) {
+fun CycleJourneyCard(cycleDay: Long?, averageDays: Int, modifier: Modifier = Modifier) {
     val stages = listOf(
         R.string.log_period to R.drawable.art_calendar,
         R.string.cycle_day to R.drawable.art_cycle,
