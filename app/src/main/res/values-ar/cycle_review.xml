@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="review_title">مراجعة الدورة</string>
+    <string name="review_intro">راجعي الأعراض المسجلة يومًا بيوم وقارني الدورات دون تخمين البيانات الناقصة.</string>
+    <string name="review_empty">سجّلي بداية الدورة لبدء المراجعة.</string>
+    <string name="review_choose">اختاري دورة مسجلة</string>
+    <string name="review_older">الأقدم</string>
+    <string name="review_newer">الأحدث</string>
+    <string name="review_complete">دورة مكتملة</string>
+    <string name="review_open">الدورة الحالية · الأيام حتى الآن</string>
+    <string name="review_coverage">تم تسجيل %1$s من %2$s يومًا</string>
+    <string name="review_compare">مقارنة الأعراض</string>
+    <string name="review_compare_hint">متوسط الأيام المسجلة من ٠ إلى ٣. الشرطة تعني عدم التسجيل لا الصفر. قد يؤثر اختلاف عدد الأيام المسجلة على المقارنة.</string>
+    <string name="review_previous">بدأت الدورة السابقة في %1$s</string>
+    <string name="review_values">المختارة: %1$s / ٣ · السابقة: %2$s / ٣</string>
+    <string name="review_map">خريطة الأعراض اليومية</string>
+    <string name="review_map_hint">اختاري عرضًا. تعرض كل خانة يوم الدورة وشدة العرض المسجلة (٠–٣). اضغطي على اليوم لعرض سجله أو تعديله. الشرطة تعني عدم التسجيل.</string>
+    <string name="review_range">الأيام %1$s–%2$s</string>
+    <string name="review_caution">تصف هذه الملخصات سجلاتك فقط ولا تشخّص المرض أو تتنبأ به. لا تُرسل بيانات الأعراض إلى خدمات الإعلانات.</string>
+</resources>

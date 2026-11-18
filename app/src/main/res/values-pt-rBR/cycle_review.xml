@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="review_title">Revisão do ciclo</string>
+    <string name="review_intro">Revise os sintomas registrados dia a dia e compare ciclos sem preencher dados ausentes.</string>
+    <string name="review_empty">Registre o início da menstruação para começar.</string>
+    <string name="review_choose">Escolha um ciclo registrado</string>
+    <string name="review_older">Anterior</string>
+    <string name="review_newer">Mais recente</string>
+    <string name="review_complete">Ciclo concluído</string>
+    <string name="review_open">Ciclo atual · dias até hoje</string>
+    <string name="review_coverage">%1$s de %2$s dias registrados</string>
+    <string name="review_compare">Comparar sintomas</string>
+    <string name="review_compare_hint">Médias dos dias registrados, de 0 a 3. Um traço indica ausência de registro, não zero. Coberturas diferentes podem afetar comparações.</string>
+    <string name="review_previous">Ciclo anterior iniciado em %1$s</string>
+    <string name="review_values">Selecionado: %1$s / 3 · Anterior: %2$s / 3</string>
+    <string name="review_map">Mapa diário de sintomas</string>
+    <string name="review_map_hint">Escolha um sintoma. Cada bloco mostra o dia do ciclo e a intensidade registrada (0–3); toque para consultar ou editar. Um traço indica dia sem registro.</string>
+    <string name="review_range">Dias %1$s–%2$s</string>
+    <string name="review_caution">Estes resumos descrevem seus próprios registros; não são diagnósticos nem previsões. Dados de sintomas não são enviados a serviços de anúncios.</string>
+</resources>

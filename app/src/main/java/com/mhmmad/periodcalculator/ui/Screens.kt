@@ -327,12 +327,17 @@ import kotlin.math.roundToInt
     Slider(value = value, onValueChange = { change(it.roundToInt().toFloat()) }, valueRange = min..max, steps = (max-min).toInt()-1)
 }
 
-@Composable fun InsightsScreen(periods: List<PeriodEntity>, entries: List<DailyEntryEntity>, vm: PeriodViewModel, onHistory: () -> Unit, onFertility: () -> Unit) {
+@Composable fun InsightsScreen(periods: List<PeriodEntity>, entries: List<DailyEntryEntity>, vm: PeriodViewModel, onHistory: () -> Unit, onFertility: () -> Unit, onReview: () -> Unit) {
     val cycle = vm.prediction()
     val measurements = CycleEngine.intervals(periods.map { PeriodRecord(it.id, LocalDate.ofEpochDay(it.startEpochDay), null) })
     var selected by remember(measurements) { mutableIntStateOf(-1) }
     ScreenColumn {
         IllustratedHeader(stringResource(R.string.insights), stringResource(R.string.data_quality), R.drawable.art_insights)
+        Panel {
+            Subheading(stringResource(R.string.review_title))
+            Text(stringResource(R.string.review_intro))
+            Button(onClick = onReview, modifier = Modifier.fillMaxWidth()) { Text(stringResource(R.string.review_title)) }
+        }
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             Stat(stringResource(R.string.count_cycles), periods.size.toString(), Modifier.weight(1f))
             Stat(stringResource(R.string.avg_cycle), cycle?.averageDays?.toString() ?: "—", Modifier.weight(1f))
