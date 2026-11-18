@@ -67,6 +67,7 @@ fun PeriodRoot(vm: PeriodViewModel, onUnlock: () -> Unit, canLock: () -> Boolean
         "symptoms" -> R.string.log_symptoms; "fertility" -> R.string.fertility
         "history" -> R.string.history; "reminders" -> R.string.reminders
         "privacy" -> R.string.privacy
+        "review" -> R.string.review_title
         else -> R.string.app_name
     }
     Scaffold(
@@ -83,6 +84,13 @@ fun PeriodRoot(vm: PeriodViewModel, onUnlock: () -> Unit, canLock: () -> Boolean
                     navigationIcon = {
                         if (screen !in tabs) IconButton(onClick = { nav.popBackStack() }) {
                             Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
+                        }
+                    },
+                    actions = {
+                        if (screen == "home" || screen == "insights") {
+                            IconButton(onClick = { go("review") }) {
+                                Icon(Icons.Outlined.DateRange, contentDescription = stringResource(R.string.review_title))
+                            }
                         }
                     },
                     colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = MaterialTheme.colorScheme.background)
@@ -134,7 +142,8 @@ fun PeriodRoot(vm: PeriodViewModel, onUnlock: () -> Unit, canLock: () -> Boolean
                     onHistory = { go("history") }, onFertility = { go("fertility") }) }
                 composable("calendar") { CalendarScreen(periods, entries, vm) { day -> editingDay = day; go("symptoms") } }
                 composable("insights") { InsightsScreen(periods, entries, vm, onHistory = { go("history") },
-                    onFertility = { go("fertility") }) }
+                    onFertility = { go("fertility") }, onReview = { go("review") }) }
+                composable("review") { CycleReviewScreen(periods, entries) { day -> editingDay = day; go("symptoms") } }
                 composable("settings") { SettingsScreen(vm, prefs, canLock, onPrivacy = { go("privacy") },
                     onReminders = { go("reminders") }, onHistory = { go("history") }) }
                 composable("period") { PeriodEditor(periods.firstOrNull { it.id == editingId }, vm, done) }
