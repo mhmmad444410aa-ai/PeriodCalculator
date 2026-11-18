@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="review_title">Cycle review</string>
+    <string name="review_intro">Review your recorded symptoms day by day and compare cycles without guessing missing data.</string>
+    <string name="review_empty">Record a period start to begin your cycle review.</string>
+    <string name="review_choose">Choose a recorded cycle</string>
+    <string name="review_older">Older</string>
+    <string name="review_newer">Newer</string>
+    <string name="review_complete">Completed cycle</string>
+    <string name="review_open">Current cycle · days so far</string>
+    <string name="review_coverage">%1$s of %2$s days logged</string>
+    <string name="review_compare">Compare symptoms</string>
+    <string name="review_compare_hint">Recorded-day averages, 0–3. A dash means no records, not zero. Different recording coverage can affect comparisons.</string>
+    <string name="review_previous">Previous cycle started %1$s</string>
+    <string name="review_values">Selected: %1$s / 3 · Previous: %2$s / 3</string>
+    <string name="review_map">Day-by-day symptom map</string>
+    <string name="review_map_hint">Choose a symptom. Each tile shows cycle day and recorded intensity (0–3); tap any day to view or edit its entry. A dash means unrecorded.</string>
+    <string name="review_range">Days %1$s–%2$s</string>
+    <string name="review_caution">These summaries describe your own entries, not a diagnosis or prediction. No symptom data is sent to ad services.</string>
+</resources>
