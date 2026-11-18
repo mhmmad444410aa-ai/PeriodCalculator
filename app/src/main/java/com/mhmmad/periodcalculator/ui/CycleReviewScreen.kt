@@ -58,7 +58,10 @@ fun CycleReviewScreen(periods: List<PeriodEntity>, entries: List<DailyEntryEntit
             Panel {
                 Text(stringResource(R.string.review_compare), style = MaterialTheme.typography.titleMedium)
                 Text(stringResource(R.string.review_compare_hint), style = MaterialTheme.typography.bodySmall)
-                if (previous != null) Text(stringResource(R.string.review_previous, dates.format(LocalDate.ofEpochDay(previous.start))))
+                if (previous != null) {
+                    Text(stringResource(R.string.review_previous, dates.format(LocalDate.ofEpochDay(previous.start))))
+                    Text(stringResource(R.string.review_coverage, number.format(previous.samples.size), number.format(previous.length)))
+                }
                 metrics.forEachIndexed { i, label ->
                     val a = active.average(i)
                     val b = previous?.average(i)
@@ -87,7 +90,9 @@ fun CycleReviewScreen(periods: List<PeriodEntity>, entries: List<DailyEntryEntit
                         week.forEach { index ->
                             val day = active.start + index
                             val level = active.level(day, metric)
-                            val color = if (level == null) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.primaryContainer
+                            val color = if (level == null) MaterialTheme.colorScheme.surfaceVariant else androidx.compose.ui.graphics.lerp(
+                                MaterialTheme.colorScheme.surface, MaterialTheme.colorScheme.primaryContainer, (level + 1) / 4f
+                            )
                             TextButton(onClick = { onDay(day) }, modifier = Modifier.weight(1f).heightIn(min = 48.dp).background(color, RoundedCornerShape(8.dp)), contentPadding = PaddingValues(0.dp)) {
                                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                     Text(number.format(index+1), style = MaterialTheme.typography.labelSmall)
