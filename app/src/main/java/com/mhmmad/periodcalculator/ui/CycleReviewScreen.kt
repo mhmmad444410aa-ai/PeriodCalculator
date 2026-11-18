@@ -15,7 +15,6 @@ import com.mhmmad.periodcalculator.data.PeriodEntity
 import com.mhmmad.periodcalculator.data.DailyEntryEntity
 import com.mhmmad.periodcalculator.domain.CycleReview
 import com.mhmmad.periodcalculator.domain.ReviewSample
-import com.mhmmad.periodcalculator.domain.ReviewCycle
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -29,7 +28,7 @@ fun CycleReviewScreen(periods: List<PeriodEntity>, entries: List<DailyEntryEntit
             ReviewSample(it.epochDay, listOf(it.cramps, it.headache, it.bloating, it.fatigue))
         }, today)
     }
-    val locale = LocalConfiguration.current.locales[0]
+    val locale = androidx.core.os.ConfigurationCompat.getLocales(LocalConfiguration.current)[0] ?: java.util.Locale.UK
     val dates = remember(locale) { DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(locale) }
     val number = remember(locale) { NumberFormat.getNumberInstance(locale).apply { maximumFractionDigits = 1 } }
     val metrics = listOf(R.string.cramps, R.string.headache, R.string.bloating, R.string.fatigue)
