@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="visit_title">Prepare for a health visit</string>
+    <string name="visit_tab">Visit</string>
+    <string name="visit_intro">Build a personal discussion sheet using your own journal and the questions you want to ask. No account or medical diagnosis.</string>
+    <string name="visit_step1">1. Review your records</string>
+    <string name="visit_days">%1$d d</string>
+    <string name="visit_coverage">Recorded days: %1$d of %2$d</string>
+    <string name="visit_starts">Period starts recorded: %1$d</string>
+    <string name="visit_length">Completed bleeding durations: %1$d–%2$d days</string>
+    <string name="visit_missing">Not recorded</string>
+    <string name="visit_metric">Days marked moderate or strong, out of days with a recorded symptom entry. Missing days are not counted.</string>
+    <string name="visit_empty">No symptom days are recorded in this range. You can still prepare your questions.</string>
+    <string name="visit_step2">2. Choose discussion topics</string>
+    <string name="visit_pick_hint">Select the questions you want to bring to a healthcare professional.</string>
+    <string name="visit_q1">What changes in cycle timing should I discuss?</string>
+    <string name="visit_q2">How can I describe my bleeding or changes in flow?</string>
+    <string name="visit_q3">What should I discuss about pain or daily activities?</string>
+    <string name="visit_q4">Could sleep, fatigue or mood changes be worth discussing?</string>
+    <string name="visit_q5">What information should I track before a follow-up?</string>
+    <string name="visit_note">My own questions or notes</string>
+    <string name="visit_session">Questions and notes are kept in this screen session only. Export them before leaving if you want to keep them.</string>
+    <string name="visit_step3">3. Preview and save</string>
+    <string name="visit_include">Include my journal summary in the document</string>
+    <string name="visit_range_label">Last %1$d days</string>
+    <string name="visit_questions">Questions for my visit</string>
+    <string name="visit_export_warning">The exported text is not encrypted. Choose a private location, and share it only with someone you trust.</string>
+    <string name="visit_export">Save discussion sheet</string>
+    <string name="visit_notice">This tool organises your records and questions. It is not a diagnosis, medical advice or a substitute for professional care. Seek urgent care for severe or worrying symptoms.</string>
+    <string name="visit_error">Could not save the document.</string>
+    <string name="visit_saved">Document saved.</string>
+</resources>

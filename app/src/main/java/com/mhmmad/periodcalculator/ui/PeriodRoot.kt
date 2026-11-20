@@ -24,7 +24,7 @@ import android.app.Activity
 import androidx.compose.ui.platform.LocalContext
 import com.mhmmad.periodcalculator.export.ExportActions
 
-private val tabs = listOf("home", "calendar", "insights", "settings")
+private val tabs = listOf("home", "calendar", "insights", "visit", "settings")
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -68,6 +68,7 @@ fun PeriodRoot(vm: PeriodViewModel, onUnlock: () -> Unit, canLock: () -> Boolean
         "history" -> R.string.history; "reminders" -> R.string.reminders
         "privacy" -> R.string.privacy
         "review" -> R.string.review_title
+        "visit" -> R.string.visit_title
         else -> R.string.app_name
     }
     Scaffold(
@@ -105,11 +106,11 @@ fun PeriodRoot(vm: PeriodViewModel, onUnlock: () -> Unit, canLock: () -> Boolean
                     tabs.forEach { route ->
                         val icon = when(route) {
                             "home" -> Icons.Outlined.Home; "calendar" -> Icons.Outlined.CalendarMonth
-                            "insights" -> Icons.Outlined.Insights; else -> Icons.Outlined.Settings
+                            "insights" -> Icons.Outlined.Insights; "visit" -> Icons.Outlined.Assignment; else -> Icons.Outlined.Settings
                         }
                         val label = when(route) {
                             "home" -> R.string.home; "calendar" -> R.string.calendar
-                            "insights" -> R.string.insights; else -> R.string.settings
+                            "insights" -> R.string.insights; "visit" -> R.string.visit_tab; else -> R.string.settings
                         }
                         NavigationBarItem(
                             selected = screen == route, onClick = { go(route) },
@@ -143,6 +144,7 @@ fun PeriodRoot(vm: PeriodViewModel, onUnlock: () -> Unit, canLock: () -> Boolean
                 composable("calendar") { CalendarScreen(periods, entries, vm) { day -> editingDay = day; go("symptoms") } }
                 composable("insights") { InsightsScreen(periods, entries, vm, onHistory = { go("history") },
                     onFertility = { go("fertility") }, onReview = { go("review") }) }
+                composable("visit") { VisitPrepScreen(periods, entries, onLog = { editingDay = java.time.LocalDate.now().toEpochDay(); go("symptoms") }) }
                 composable("review") { CycleReviewScreen(periods, entries) { day -> editingDay = day; go("symptoms") } }
                 composable("settings") { SettingsScreen(vm, prefs, canLock, onPrivacy = { go("privacy") },
                     onReminders = { go("reminders") }, onHistory = { go("history") }) }

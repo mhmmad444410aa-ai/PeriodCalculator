@@ -18,7 +18,13 @@ Calculadora Menstrual é um diário menstrual prático e privado. Registre o in�
 - Dados locais, sem conta e sem sincronização na nuvem.
 - Interface em português brasileiro, árabe e inglês britânico.
 
+- Preparação da consulta: revise registros de 30, 60 ou 90 dias, escolha perguntas, adicione notas e salve uma pauta de conversa pelo seletor de arquivos, mesmo sem diário.
+
 **Aviso de saúde:** As datas são apenas estimativas e não constituem orientação médica. O calendário de fertilidade não é confiável para evitar ou confirmar uma gravidez. Procure um profissional de saúde em caso de sintomas preocupantes.
+
+## Notas da versão 1.0.6
+Nova área independente de preparação da consulta, resumo configurável de registros, lista de perguntas e exportação opcional de documento de texto.
+
 
 ## Notas da versão 1.0.5
 Nova revisão interativa do ciclo, mapa diário de intensidade, comparações, cobertura de registros e edição direta, com distinção entre dados ausentes e zero.

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="visit_title">التحضير لزيارة صحية</string>
+    <string name="visit_tab">الزيارة</string>
+    <string name="visit_intro">جهّزي ورقة نقاش شخصية من سجلك والأسئلة التي ترغبين في طرحها. دون حساب أو تشخيص طبي.</string>
+    <string name="visit_step1">١. راجعي سجلاتك</string>
+    <string name="visit_days">%1$d يوم</string>
+    <string name="visit_coverage">أيام التسجيل: %1$d من %2$d</string>
+    <string name="visit_starts">بدايات الدورة المسجلة: %1$d</string>
+    <string name="visit_length">مدة النزيف المكتملة: %1$d–%2$d يوم</string>
+    <string name="visit_missing">غير مسجل</string>
+    <string name="visit_metric">عدد الأيام ذات الأعراض المتوسطة أو الشديدة من أيام التسجيل فقط، دون احتساب الأيام غير المسجلة.</string>
+    <string name="visit_empty">لا توجد أيام أعراض مسجلة في هذه الفترة. لا يزال بإمكانك إعداد أسئلتك.</string>
+    <string name="visit_step2">٢. اختاري مواضيع النقاش</string>
+    <string name="visit_pick_hint">اختاري الأسئلة التي تودين طرحها على مختص صحي.</string>
+    <string name="visit_q1">ما التغيّرات في مواعيد الدورة التي ينبغي مناقشتها؟</string>
+    <string name="visit_q2">كيف أصف النزيف أو تغيّرات شدته؟</string>
+    <string name="visit_q3">ما الذي ينبغي مناقشته حول الألم أو الأنشطة اليومية؟</string>
+    <string name="visit_q4">هل تستحق تغيّرات النوم أو التعب أو المزاج المناقشة؟</string>
+    <string name="visit_q5">ما المعلومات التي ينبغي تسجيلها قبل المتابعة؟</string>
+    <string name="visit_note">أسئلتي أو ملاحظاتي الخاصة</string>
+    <string name="visit_session">تبقى الأسئلة والملاحظات أثناء جلسة هذه الشاشة فقط. صدّريها قبل المغادرة إن رغبتِ في الاحتفاظ بها.</string>
+    <string name="visit_step3">٣. المعاينة والحفظ</string>
+    <string name="visit_include">تضمين ملخص سجلي في المستند</string>
+    <string name="visit_range_label">آخر %1$d يوم</string>
+    <string name="visit_questions">أسئلة للزيارة</string>
+    <string name="visit_export_warning">النص المصدّر غير مشفر. اختاري مكانًا خاصًا ولا تشاركيه إلا مع شخص تثقين به.</string>
+    <string name="visit_export">حفظ ورقة النقاش</string>
+    <string name="visit_notice">تنظّم هذه الأداة سجلاتك وأسئلتك، ولا تقدم تشخيصًا أو نصيحة طبية ولا تغني عن الرعاية المهنية. اطلبي الرعاية العاجلة عند أعراض شديدة أو مقلقة.</string>
+    <string name="visit_error">تعذر حفظ المستند.</string>
+    <string name="visit_saved">تم حفظ المستند.</string>
+</resources>

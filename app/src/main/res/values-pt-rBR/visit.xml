@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="visit_title">Preparar uma consulta de saúde</string>
+    <string name="visit_tab">Consulta</string>
+    <string name="visit_intro">Monte uma pauta pessoal com seu diário e as perguntas que deseja fazer. Sem conta ou diagnóstico médico.</string>
+    <string name="visit_step1">1. Revise seus registros</string>
+    <string name="visit_days">%1$d d</string>
+    <string name="visit_coverage">Dias registrados: %1$d de %2$d</string>
+    <string name="visit_starts">Inícios de menstruação registrados: %1$d</string>
+    <string name="visit_length">Duração do sangramento concluído: %1$d–%2$d dias</string>
+    <string name="visit_missing">Não registrado</string>
+    <string name="visit_metric">Dias com intensidade moderada ou forte, entre os dias com registro de sintomas. Dias sem registro não contam.</string>
+    <string name="visit_empty">Não há dias de sintomas registrados nesse intervalo. Você ainda pode preparar suas perguntas.</string>
+    <string name="visit_step2">2. Escolha temas para conversar</string>
+    <string name="visit_pick_hint">Selecione as perguntas para levar a um profissional de saúde.</string>
+    <string name="visit_q1">Quais mudanças nas datas do ciclo devo discutir?</string>
+    <string name="visit_q2">Como posso descrever meu sangramento ou mudanças no fluxo?</string>
+    <string name="visit_q3">O que devo discutir sobre dor ou atividades diárias?</string>
+    <string name="visit_q4">Vale conversar sobre alterações de sono, cansaço ou humor?</string>
+    <string name="visit_q5">Quais informações devo acompanhar antes do retorno?</string>
+    <string name="visit_note">Minhas perguntas ou anotações</string>
+    <string name="visit_session">As perguntas e anotações ficam apenas nesta sessão da tela. Exporte antes de sair se quiser guardá-las.</string>
+    <string name="visit_step3">3. Revise e salve</string>
+    <string name="visit_include">Incluir o resumo do diário no documento</string>
+    <string name="visit_range_label">Últimos %1$d dias</string>
+    <string name="visit_questions">Perguntas para a consulta</string>
+    <string name="visit_export_warning">O texto exportado não é criptografado. Escolha um local privado e compartilhe apenas com pessoas de confiança.</string>
+    <string name="visit_export">Salvar pauta da consulta</string>
+    <string name="visit_notice">Esta ferramenta organiza registros e perguntas. Não oferece diagnóstico ou orientação médica nem substitui cuidados profissionais. Procure atendimento urgente para sintomas graves ou preocupantes.</string>
+    <string name="visit_error">Não foi possível salvar o documento.</string>
+    <string name="visit_saved">Documento salvo.</string>
+</resources>
