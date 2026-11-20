@@ -28,13 +28,12 @@ object PlanningTools {
             PlanningWindow(central.minusDays(spread), central.plusDays(spread + bleed - 1), central)
         }.filter { !it.last.isBefore(today) && !it.first.isAfter(end) && !it.last.isBefore(start) }
         // Include observed completed or currently recorded bleeding, not only forecasts.
-        val observed = past.mapNotNull { p ->
-            val actualEnd = p.end ?: p.start
-            if (actualEnd.isBefore(p.start)) null else p.start..minOf(actualEnd,today)
-        }
+        val observed: List<Pair<LocalDate, LocalDate>> = past.map { p ->
+            Pair(p.start, minOf(p.end ?: p.start, today))
+        }.filter { (first, last) -> !last.isBefore(first) }
         val overlap = (0 until duration).count { index ->
             val day = start.plusDays(index.toLong())
-            windows.any { day in it.first..it.last } || observed.any { day in it }
+            windows.any { day in it.first..it.last } || observed.any { (first, last) -> !day.isBefore(first) && !day.isAfter(last) }
         }
         return EventPlan(windows, overlap, duration)
     }
