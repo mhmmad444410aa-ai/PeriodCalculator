@@ -30,6 +30,8 @@ class PeriodViewModel(application: Application) : AndroidViewModel(application) 
     fun reminder(value: Boolean) = viewModelScope.launch { preferences.setReminder(value) }
     fun periodReminder(value: Boolean) = viewModelScope.launch { preferences.setPeriodReminder(value) }
     fun lock(value: Boolean) = viewModelScope.launch { preferences.setLock(value) }
+    fun toggleKit(key: String) { viewModelScope.launch { preferences.toggleKit(key) } }
+    fun resetKit() { viewModelScope.launch { preferences.resetKit() } }
     fun clearAll(onComplete: () -> Unit) = viewModelScope.launch {
         repo.clear(); preferences.clear(); AdConsentManager(getApplication()).reset(); onComplete()
     }

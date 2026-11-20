@@ -69,6 +69,10 @@ fun PeriodRoot(vm: PeriodViewModel, onUnlock: () -> Unit, canLock: () -> Boolean
         "privacy" -> R.string.privacy
         "review" -> R.string.review_title
         "visit" -> R.string.visit_title
+        "tools" -> R.string.tools_title
+        "planner" -> R.string.tools_planner
+        "accuracy" -> R.string.tools_accuracy
+        "kit" -> R.string.tools_kit
         else -> R.string.app_name
     }
     Scaffold(
@@ -140,10 +144,14 @@ fun PeriodRoot(vm: PeriodViewModel, onUnlock: () -> Unit, canLock: () -> Boolean
                 composable("onboarding") { OnboardingScreen(vm) { go("home") } }
                 composable("home") { HomeScreen(periods, entries, vm, onPeriod = { editingId = 0; go("period") },
                     onSymptom = { editingDay = java.time.LocalDate.now().toEpochDay(); go("symptoms") },
-                    onHistory = { go("history") }, onFertility = { go("fertility") }) }
+                    onHistory = { go("history") }, onFertility = { go("fertility") }, onTools = { go("tools") }) }
                 composable("calendar") { CalendarScreen(periods, entries, vm) { day -> editingDay = day; go("symptoms") } }
                 composable("insights") { InsightsScreen(periods, entries, vm, onHistory = { go("history") },
-                    onFertility = { go("fertility") }, onReview = { go("review") }) }
+                    onFertility = { go("fertility") }, onReview = { go("review") }, onTools = { go("tools") }) }
+                composable("tools") { CycleToolsHome { go(it) } }
+                composable("planner") { EventPlannerScreen(periods, prefs.cycleLength, prefs.bleedingLength, onPeriod = { editingId = 0; go("period") }, onKit = { go("kit") }) }
+                composable("accuracy") { ForecastAuditScreen(periods) }
+                composable("kit") { PreparationKitScreen(prefs.kitItems, vm::toggleKit, vm::resetKit) }
                 composable("visit") { VisitPrepScreen(periods, entries, onLog = { editingDay = java.time.LocalDate.now().toEpochDay(); go("symptoms") }) }
                 composable("review") { CycleReviewScreen(periods, entries) { day -> editingDay = day; go("symptoms") } }
                 composable("settings") { SettingsScreen(vm, prefs, canLock, onPrivacy = { go("privacy") },

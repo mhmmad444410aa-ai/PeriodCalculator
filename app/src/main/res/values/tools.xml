@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tools_title">Cycle planning studio</string>
+    <string name="tools_intro">Plan upcoming events, review historical estimates and prepare a personal essentials kit.</string>
+    <string name="tools_open">Open</string>
+    <string name="tools_planner">Event planner</string>
+    <string name="tools_planner_desc">Explore whether an upcoming trip, exam or event overlaps an estimated bleeding window.</string>
+    <string name="tools_accuracy">Forecast check</string>
+    <string name="tools_accuracy_desc">Replay past estimates against actual recorded starts, without using later records.</string>
+    <string name="tools_kit">Essentials checklist</string>
+    <string name="tools_kit_desc">Build a reusable preparation kit for work, school or travel.</string>
+    <string name="tools_event_date">Event starts</string>
+    <string name="tools_offset">In %1$d days</string>
+    <string name="tools_event_duration">Duration: %1$d days</string>
+    <string name="tools_need_record">Add a recent period start to calculate a planning range. Old or uncertain records may not support an estimate.</string>
+    <string name="tools_overlap">Possible overlap</string>
+    <string name="tools_overlap_days">%1$d of %2$d event days</string>
+    <string name="tools_no_overlap">No overlap appears in this estimate, but bleeding can still occur.</string>
+    <string name="tools_planner_warning">Estimates are approximate, extend with uncertainty over time and are not medical or fertility guidance. Recorded ongoing bleeding has no known end. Use this only to prepare, never to guarantee a date.</string>
+    <string name="tools_audit_method">Each retrospective estimate uses only earlier recorded starts. The displayed range is from the calendar model, not a measured probability. Past performance does not guarantee future accuracy.</string>
+    <string name="tools_audit_empty">Record at least four distinct period starts with two usable earlier intervals to see the first historical comparison.</string>
+    <string name="tools_error_average">Average absolute error (days)</string>
+    <string name="tools_window_hits">Actual start fell in the estimated range: %1$d of %2$d</string>
+    <string name="tools_actual">Actual start: %1$s</string>
+    <string name="tools_estimated">Estimated start: %1$s</string>
+    <string name="tools_exact">Same day</string>
+    <string name="tools_late">Actual start %1$d days later</string>
+    <string name="tools_early">Actual start %1$d days earlier</string>
+    <string name="tools_kit_products">Preferred menstrual products</string>
+    <string name="tools_kit_spares">Spare underwear or clothing</string>
+    <string name="tools_kit_bag">Discreet pouch or disposal bag</string>
+    <string name="tools_kit_hygiene">Personal hygiene supplies</string>
+    <string name="tools_kit_water">Water bottle</string>
+    <string name="tools_kit_comfort">Comfort items of your choice</string>
+    <string name="tools_kit_contact">Contact or support information</string>
+    <string name="tools_kit_progress">Prepared: %1$d of %2$d</string>
+    <string name="tools_kit_done">Your checklist is complete.</string>
+    <string name="tools_kit_reset">Reset checklist</string>
+    <string name="tools_kit_local">Checkmarks are saved only on this device and can be cleared at any time.</string>
+    <string name="tools_kit_confirm">Clear all checkmarks for this checklist?</string>
+</resources>

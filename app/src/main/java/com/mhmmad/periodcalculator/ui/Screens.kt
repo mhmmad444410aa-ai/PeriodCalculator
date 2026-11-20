@@ -118,13 +118,14 @@ import kotlin.math.roundToInt
 }
 
 @Composable fun HomeScreen(periods: List<PeriodEntity>, entries: List<DailyEntryEntity>, vm: PeriodViewModel,
-                       onPeriod: () -> Unit, onSymptom: () -> Unit, onHistory: () -> Unit, onFertility: () -> Unit) {
+                       onPeriod: () -> Unit, onSymptom: () -> Unit, onHistory: () -> Unit, onFertility: () -> Unit, onTools: () -> Unit) {
     val prediction = vm.prediction()
     val today = LocalDate.now()
     val records = periods.map { PeriodRecord(it.id, LocalDate.ofEpochDay(it.startEpochDay), it.endEpochDay?.let(LocalDate::ofEpochDay)) }
     val currentDay = CycleEngine.currentCycleDay(records, today)
     ScreenColumn {
         IllustratedHeader(stringResource(R.string.recent_note), stringResource(R.string.prediction_note), R.drawable.art_wellness)
+        CycleToolsEntry(onTools)
         CycleJourneyCard(currentDay, prediction?.averageDays ?: 28)
         if (prediction == null) {
             FloralEmptyState(stringResource(R.string.no_data), stringResource(R.string.add_first), stringResource(R.string.log_period), onPeriod)
@@ -327,12 +328,13 @@ import kotlin.math.roundToInt
     Slider(value = value, onValueChange = { change(it.roundToInt().toFloat()) }, valueRange = min..max, steps = (max-min).toInt()-1)
 }
 
-@Composable fun InsightsScreen(periods: List<PeriodEntity>, entries: List<DailyEntryEntity>, vm: PeriodViewModel, onHistory: () -> Unit, onFertility: () -> Unit, onReview: () -> Unit) {
+@Composable fun InsightsScreen(periods: List<PeriodEntity>, entries: List<DailyEntryEntity>, vm: PeriodViewModel, onHistory: () -> Unit, onFertility: () -> Unit, onReview: () -> Unit, onTools: () -> Unit) {
     val cycle = vm.prediction()
     val measurements = CycleEngine.intervals(periods.map { PeriodRecord(it.id, LocalDate.ofEpochDay(it.startEpochDay), null) })
     var selected by remember(measurements) { mutableIntStateOf(-1) }
     ScreenColumn {
         IllustratedHeader(stringResource(R.string.insights), stringResource(R.string.data_quality), R.drawable.art_insights)
+        CycleToolsEntry(onTools)
         Panel {
             Subheading(stringResource(R.string.review_title))
             Text(stringResource(R.string.review_intro))

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tools_title">استوديو تخطيط الدورة</string>
+    <string name="tools_intro">خططي لمناسباتك القادمة وراجعي التقديرات السابقة وجهزي قائمة مستلزماتك الشخصية.</string>
+    <string name="tools_open">فتح</string>
+    <string name="tools_planner">مخطط المناسبات</string>
+    <string name="tools_planner_desc">استكشفي إمكانية تداخل رحلة أو امتحان أو مناسبة مع فترة نزيف مقدّرة.</string>
+    <string name="tools_accuracy">مراجعة التوقعات</string>
+    <string name="tools_accuracy_desc">قارني التقديرات التاريخية بالبدايات المسجلة دون استخدام السجلات اللاحقة.</string>
+    <string name="tools_kit">قائمة المستلزمات</string>
+    <string name="tools_kit_desc">جهزي قائمة قابلة لإعادة الاستخدام للعمل أو الدراسة أو السفر.</string>
+    <string name="tools_event_date">بداية المناسبة</string>
+    <string name="tools_offset">بعد %1$d يوم</string>
+    <string name="tools_event_duration">المدة: %1$d يوم</string>
+    <string name="tools_need_record">أضيفي تاريخ بداية دورة حديثة لحساب نطاق التخطيط. قد لا تكفي السجلات القديمة أو غير المؤكدة.</string>
+    <string name="tools_overlap">التداخل المحتمل</string>
+    <string name="tools_overlap_days">%1$d من %2$d يوم للمناسبة</string>
+    <string name="tools_no_overlap">لا يظهر تداخل في هذا التقدير، لكن النزيف قد يحدث.</string>
+    <string name="tools_planner_warning">التقديرات تقريبية ويزداد عدم اليقين بمرور الوقت، وليست إرشادًا طبيًا أو للخصوبة. لا يُعرف موعد انتهاء النزيف الجاري المسجل. استخدميها للاستعداد فقط دون ضمان المواعيد.</string>
+    <string name="tools_audit_method">يستخدم كل تقدير تاريخي بدايات سابقة فقط. النطاق المعروض من نموذج التقويم وليس احتمالًا مقاسًا. النتائج السابقة لا تضمن دقة المستقبل.</string>
+    <string name="tools_audit_empty">سجلي أربع بدايات دورة مختلفة على الأقل مع فترتين سابقتين صالحتين للحساب لعرض أول مقارنة تاريخية.</string>
+    <string name="tools_error_average">متوسط الخطأ المطلق (بالأيام)</string>
+    <string name="tools_window_hits">وقعت البداية الفعلية في النطاق المقدّر: %1$d من %2$d</string>
+    <string name="tools_actual">البداية الفعلية: %1$s</string>
+    <string name="tools_estimated">البداية المقدّرة: %1$s</string>
+    <string name="tools_exact">اليوم نفسه</string>
+    <string name="tools_late">البداية الفعلية متأخرة %1$d يوم</string>
+    <string name="tools_early">البداية الفعلية مبكرة %1$d يوم</string>
+    <string name="tools_kit_products">منتجات الدورة المفضلة</string>
+    <string name="tools_kit_spares">ملابس داخلية أو ملابس احتياطية</string>
+    <string name="tools_kit_bag">حقيبة صغيرة أو كيس للتخلص من المستلزمات</string>
+    <string name="tools_kit_hygiene">مستلزمات النظافة الشخصية</string>
+    <string name="tools_kit_water">زجاجة ماء</string>
+    <string name="tools_kit_comfort">مستلزمات الراحة التي تختارينها</string>
+    <string name="tools_kit_contact">معلومات جهة اتصال أو دعم</string>
+    <string name="tools_kit_progress">تم تجهيز %1$d من %2$d</string>
+    <string name="tools_kit_done">اكتملت قائمة التجهيزات.</string>
+    <string name="tools_kit_reset">إعادة ضبط القائمة</string>
+    <string name="tools_kit_local">تُحفظ علامات الإنجاز على هذا الجهاز فقط ويمكن حذفها في أي وقت.</string>
+    <string name="tools_kit_confirm">هل تريدين إزالة جميع علامات الإنجاز من هذه القائمة؟</string>
+</resources>

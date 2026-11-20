@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tools_title">Estúdio de planejamento menstrual</string>
+    <string name="tools_intro">Planeje eventos, revise estimativas históricas e prepare seus itens essenciais.</string>
+    <string name="tools_open">Abrir</string>
+    <string name="tools_planner">Planejador de eventos</string>
+    <string name="tools_planner_desc">Veja se uma viagem, prova ou evento pode coincidir com uma janela estimada de sangramento.</string>
+    <string name="tools_accuracy">Revisão de previsões</string>
+    <string name="tools_accuracy_desc">Compare estimativas passadas com inícios registrados, sem usar registros posteriores.</string>
+    <string name="tools_kit">Lista de itens essenciais</string>
+    <string name="tools_kit_desc">Monte uma lista reutilizável para trabalho, escola ou viagem.</string>
+    <string name="tools_event_date">Início do evento</string>
+    <string name="tools_offset">Em %1$d dias</string>
+    <string name="tools_event_duration">Duração: %1$d dias</string>
+    <string name="tools_need_record">Adicione um início de menstruação recente para estimar uma janela. Registros antigos ou incertos podem não permitir uma estimativa.</string>
+    <string name="tools_overlap">Possível coincidência</string>
+    <string name="tools_overlap_days">%1$d de %2$d dias do evento</string>
+    <string name="tools_no_overlap">Não aparece coincidência nesta estimativa, mas ainda pode haver sangramento.</string>
+    <string name="tools_planner_warning">Estimativas são aproximadas, com incerteza crescente, e não são orientação médica ou de fertilidade. O sangramento em andamento ainda não tem fim conhecido. Use apenas para se preparar, nunca para garantir datas.</string>
+    <string name="tools_audit_method">Cada estimativa retrospectiva usa apenas inícios anteriores. A faixa vem do modelo de calendário, não de uma probabilidade medida. O desempenho passado não garante precisão futura.</string>
+    <string name="tools_audit_empty">Registre pelo menos quatro inícios distintos, com dois intervalos anteriores utilizáveis, para ver a primeira comparação histórica.</string>
+    <string name="tools_error_average">Erro absoluto médio (dias)</string>
+    <string name="tools_window_hits">Início real dentro da faixa estimada: %1$d de %2$d</string>
+    <string name="tools_actual">Início real: %1$s</string>
+    <string name="tools_estimated">Início estimado: %1$s</string>
+    <string name="tools_exact">Mesmo dia</string>
+    <string name="tools_late">Início real %1$d dias depois</string>
+    <string name="tools_early">Início real %1$d dias antes</string>
+    <string name="tools_kit_products">Produtos menstruais de sua preferência</string>
+    <string name="tools_kit_spares">Roupa íntima ou roupa extra</string>
+    <string name="tools_kit_bag">Bolsa discreta ou saco de descarte</string>
+    <string name="tools_kit_hygiene">Itens de higiene pessoal</string>
+    <string name="tools_kit_water">Garrafa de água</string>
+    <string name="tools_kit_comfort">Itens de conforto de sua escolha</string>
+    <string name="tools_kit_contact">Informações de contato ou apoio</string>
+    <string name="tools_kit_progress">Preparados: %1$d de %2$d</string>
+    <string name="tools_kit_done">Sua lista está completa.</string>
+    <string name="tools_kit_reset">Reiniciar lista</string>
+    <string name="tools_kit_local">As marcações ficam apenas neste dispositivo e podem ser apagadas a qualquer momento.</string>
+    <string name="tools_kit_confirm">Apagar todas as marcações desta lista?</string>
+</resources>

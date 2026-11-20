@@ -20,7 +20,12 @@ Period Calculator helps you keep a simple, private menstrual journal. Record per
 
 - Visit preparation: select a 30, 60 or 90-day range, review recorded symptom counts, choose questions, add your own and save a private discussion sheet using the system file picker. Works even without a journal.
 
+- Cycle planning studio: an event planner with approximate overlap ranges, retrospective forecast comparisons using only earlier records, and a persistent reusable essentials checklist.
+
 **Health notice:** Predictions are estimates, not medical advice. Calendar-based fertility dates cannot reliably prevent or confirm pregnancy. Speak to a qualified clinician about worrying symptoms.
+
+## Release notes 1.0.7
+New planning studio, event overlap estimates, forecast replay and a locally saved essentials checklist.
 
 ## Release notes 1.0.6
 New independent visit preparation workspace, configurable recording summary, question checklist and opt-in text document export.
