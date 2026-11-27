@@ -182,6 +182,7 @@ import kotlinx.coroutines.launch
                 }
             }
         }
+        DiaryExplorer(entries, onSymptom, onAtlas)
         Subheading(stringResource(R.string.log_today))
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             DashboardTile(stringResource(R.string.log_symptoms), Icons.Outlined.FavoriteBorder, Modifier.weight(1f), onSymptom)
@@ -234,7 +235,7 @@ import kotlinx.coroutines.launch
     val fertility = prediction?.let(CycleEngine::fertility)
     val recorded = remember(periods) { periods.flatMap { p ->
         val first = LocalDate.ofEpochDay(p.startEpochDay)
-        val end = p.endEpochDay?.let(LocalDate::ofEpochDay) ?: first.plusDays((vm.prefs.value.bleedingLength - 1).toLong())
+        val end = p.endEpochDay?.let(LocalDate::ofEpochDay) ?: first
         if (end.isBefore(first) || ChronoUnit.DAYS.between(first, end) > 15) emptyList()
         else (0..ChronoUnit.DAYS.between(first, end).toInt()).map { first.plusDays(it.toLong()) }
     }.toSet() }
@@ -481,4 +482,49 @@ import kotlinx.coroutines.launch
         }
         Notice(stringResource(R.string.medical_notice))
     }
+}
+
+
+@Composable
+private fun DiaryExplorer(entries: List<DailyEntryEntity>, onLog: () -> Unit, onAtlas: () -> Unit) {
+    val c = MaterialTheme.colorScheme
+    val lang = wellnessLanguage()
+    fun t(en: String, ar: String, pt: String) = when(lang) { "ar" -> ar; "pt" -> pt; else -> en }
+    var range by remember { mutableIntStateOf(30) }
+    var credits by remember { mutableStateOf(false) }
+    val today = LocalDate.now().toEpochDay()
+    val items = entries.filter { it.epochDay in (today-range+1)..today }.distinctBy { it.epochDay }
+    val stats = listOf(
+        Triple(R.drawable.openmoji_drop, stringResource(R.string.cramps), items.count { it.cramps > 0 }),
+        Triple(R.drawable.openmoji_flower, stringResource(R.string.headache), items.count { it.headache > 0 }),
+        Triple(R.drawable.openmoji_leaf, stringResource(R.string.bloating), items.count { it.bloating > 0 }),
+        Triple(R.drawable.openmoji_moon, stringResource(R.string.fatigue), items.count { it.fatigue > 0 })
+    )
+    Surface(color = c.surface, shape = RoundedCornerShape(30.dp), border = BorderStroke(1.dp,c.outlineVariant)) {
+        Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Text(t("Diary explorer","مستكشف المذكرات","Explorador do diário"), style = MaterialTheme.typography.headlineSmall)
+            Text(t("Compare symptoms across your recorded days.","قارني الأعراض خلال أيام التسجيل.","Compare os sintomas nos dias registados."), style = MaterialTheme.typography.bodyMedium)
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                listOf(7,30,90).forEach { n -> FilterChip(selected = range == n, onClick = { range=n }, label = { Text("$n " + t("days","يومًا","dias")) }) }
+            }
+            Text(t("Recorded days: ","أيام التسجيل: ","Dias registados: ") + items.size + "/" + range, style = MaterialTheme.typography.labelLarge)
+            if(items.isEmpty()) Text(stringResource(R.string.no_data), color = c.onSurfaceVariant)
+            stats.forEach { (art,label,count) ->
+                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Image(painterResource(art), null, Modifier.size(52.dp).background(c.secondaryContainer,CircleShape).padding(7.dp))
+                    Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(5.dp)) {
+                        Text(label, style = MaterialTheme.typography.titleMedium)
+                        LinearProgressIndicator(progress = { if(items.isEmpty()) 0f else count.toFloat()/items.size }, modifier = Modifier.fillMaxWidth().height(7.dp).clip(CircleShape))
+                    }
+                    Text(if(items.isEmpty()) "—" else "$count/${items.size}", style = MaterialTheme.typography.labelMedium)
+                }
+            }
+            Text(t("Counts only logged days; not a diagnosis.","تُحسب الأيام المسجلة فقط؛ ليست تشخيصًا.","Conta só os dias registados; não é diagnóstico."), style = MaterialTheme.typography.bodySmall)
+            FilledTonalButton(onClick = if(items.isEmpty()) onLog else onAtlas, modifier = Modifier.fillMaxWidth()) { Text(if(items.isEmpty()) stringResource(R.string.log_symptoms) else t("Explore symptom patterns","استكشفي نمط الأعراض","Explorar padrões")) }
+            TextButton(onClick = { credits=true }) { Text(t("Artwork and software licences","تراخيص الرسومات والبرمجيات","Licenças de arte e software")) }
+        }
+    }
+    if(credits) AlertDialog(onDismissRequest = { credits=false }, title = { Text(t("Open source credits","المصادر المفتوحة","Créditos de código aberto")) },
+        text = { Text("OpenMoji — https://openmoji.org — CC BY-SA 4.0. SVG adapted to Android VectorDrawable.\n\nKizitonwose Calendar 2.6.2 — MIT. Copyright © 2019 Kizito Nwose.\n\nFull notices: assets/third_party_notices.txt") },
+        confirmButton = { TextButton(onClick = { credits=false }) { Text(stringResource(R.string.back)) } })
 }
