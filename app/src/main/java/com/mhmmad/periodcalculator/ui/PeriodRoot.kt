@@ -24,7 +24,7 @@ import android.app.Activity
 import androidx.compose.ui.platform.LocalContext
 import com.mhmmad.periodcalculator.export.ExportActions
 
-private val tabs = listOf("home", "calendar", "insights", "visit", "settings")
+private val tabs = listOf("home", "calendar", "studio", "visit", "settings")
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -62,7 +62,7 @@ fun PeriodRoot(vm: PeriodViewModel, onUnlock: () -> Unit, canLock: () -> Boolean
         }
     }
     val titleId = when (screen) {
-        "calendar" -> R.string.calendar; "insights" -> R.string.insights
+        "calendar" -> R.string.calendar; "studio" -> R.string.insights; "insights" -> R.string.insights
         "settings" -> R.string.settings; "period" -> R.string.log_period
         "symptoms" -> R.string.log_symptoms; "fertility" -> R.string.fertility
         "history" -> R.string.history; "reminders" -> R.string.reminders
@@ -92,7 +92,7 @@ fun PeriodRoot(vm: PeriodViewModel, onUnlock: () -> Unit, canLock: () -> Boolean
                         }
                     },
                     actions = {
-                        if (screen == "home" || screen == "insights") {
+                        if (screen == "home" || screen == "insights" || screen == "studio") {
                             IconButton(onClick = { go("review") }) {
                                 Icon(Icons.Outlined.DateRange, contentDescription = stringResource(R.string.review_title))
                             }
@@ -110,11 +110,11 @@ fun PeriodRoot(vm: PeriodViewModel, onUnlock: () -> Unit, canLock: () -> Boolean
                     tabs.forEach { route ->
                         val icon = when(route) {
                             "home" -> Icons.Outlined.Home; "calendar" -> Icons.Outlined.CalendarMonth
-                            "insights" -> Icons.Outlined.Insights; "visit" -> Icons.Outlined.Assignment; else -> Icons.Outlined.Settings
+                            "studio" -> Icons.Outlined.Insights; "visit" -> Icons.Outlined.Assignment; else -> Icons.Outlined.Settings
                         }
                         val label = when(route) {
                             "home" -> R.string.home; "calendar" -> R.string.calendar
-                            "insights" -> R.string.insights; "visit" -> R.string.visit_tab; else -> R.string.settings
+                            "studio" -> R.string.insights; "visit" -> R.string.visit_tab; else -> R.string.settings
                         }
                         NavigationBarItem(
                             selected = screen == route, onClick = { go(route) },
@@ -146,6 +146,7 @@ fun PeriodRoot(vm: PeriodViewModel, onUnlock: () -> Unit, canLock: () -> Boolean
                     onSymptom = { editingDay = java.time.LocalDate.now().toEpochDay(); go("symptoms") },
                     onHistory = { go("history") }, onFertility = { go("fertility") }, onTools = { go("tools") }) }
                 composable("calendar") { CalendarScreen(periods, entries, vm) { day -> editingDay = day; go("symptoms") } }
+                composable("studio") { Column { TextButton(onClick = { go("insights") }, modifier = Modifier.fillMaxWidth()) { Text(stringResource(R.string.insights)) }; Box(Modifier.weight(1f)) { WellnessStudio(entries) } } }
                 composable("insights") { InsightsScreen(periods, entries, vm, onHistory = { go("history") },
                     onFertility = { go("fertility") }, onReview = { go("review") }, onTools = { go("tools") }) }
                 composable("tools") { CycleToolsHome { go(it) } }
