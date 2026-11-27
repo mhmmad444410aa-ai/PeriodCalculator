@@ -33,6 +33,12 @@ import java.time.temporal.ChronoUnit
 import java.time.temporal.WeekFields
 import java.util.Locale
 import kotlin.math.roundToInt
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.layout.ContentScale
+import com.kizitonwose.calendar.compose.HorizontalCalendar
+import com.kizitonwose.calendar.compose.rememberCalendarState
+import com.kizitonwose.calendar.core.DayPosition
+import kotlinx.coroutines.launch
 
 @Composable fun DateText(date: LocalDate): String {
     val config = LocalContext.current.resources.configuration
@@ -129,30 +135,50 @@ import kotlin.math.roundToInt
     ScreenColumn {
         Text(DateText(today), style = MaterialTheme.typography.labelLarge, color = c.onSurfaceVariant)
         Text(t("Your cycle, your rhythm","دورتك، إيقاعك","Seu ciclo, seu ritmo"), style = MaterialTheme.typography.headlineLarge)
-        Surface(color = Pine, contentColor = Color.White, shape = RoundedCornerShape(24.dp)) {
-            Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                    Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(5.dp)) {
-                        Text(stringResource(R.string.cycle_day), style = MaterialTheme.typography.labelLarge, color = Color(0xFFD2E8D8))
-                        Text(currentDay?.toString() ?: "—", style = MaterialTheme.typography.displayLarge, fontWeight = FontWeight.Bold)
-                        Text(if(prediction == null) t("Add your first period","سجّلي دورتك الأولى","Registre a primeira menstruação") else stringResource(R.string.next_period), style = MaterialTheme.typography.bodyMedium)
+        Surface(shape = RoundedCornerShape(32.dp), color = c.surface, tonalElevation = 2.dp) {
+            Column {
+                Box(Modifier.fillMaxWidth().height(235.dp), contentAlignment = Alignment.Center) {
+                    Image(painterResource(R.drawable.art_wellness), null, Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
+                    Box(Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(Color(0xCFFFF9F1), Color(0xEFFFF9F1)))))
+                    CycleProgressRing(
+                        progress = if(currentDay != null && prediction != null) currentDay.toFloat()/prediction.averageDays.coerceAtLeast(1) else 0f,
+                        title = stringResource(R.string.cycle_day),
+                        bigNumber = currentDay?.toString() ?: "—",
+                        footer = if(currentDay == null) t("No cycle recorded","لم تسجّلي دورة","Sem registo") else t("Current cycle","الدورة الحالية","Ciclo atual"),
+                        modifier = Modifier.size(210.dp)
+                    )
+                }
+                Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Text(if(prediction == null) t("Begin your personal diary","ابدئي مذكرتك الشخصية","Comece seu diário pessoal") else stringResource(R.string.next_period), style = MaterialTheme.typography.titleLarge)
+                    if(prediction != null) {
+                        Text("${DateText(prediction.earliest)} – ${DateText(prediction.latest)}", style = MaterialTheme.typography.titleMedium)
+                        Text(stringResource(R.string.prediction_note), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant)
                     }
-                    Box(Modifier.size(100.dp), contentAlignment = Alignment.Center) {
-                        Canvas(Modifier.fillMaxSize()) {
-                            val stroke = 8.dp.toPx()
-                            drawCircle(Color.White.copy(alpha = .19f), radius = size.minDimension/2-stroke, style = androidx.compose.ui.graphics.drawscope.Stroke(stroke))
-                            if(currentDay != null && prediction != null) drawArc(Color(0xFFB9E4CC), -90f, 360f*(currentDay.toFloat()/prediction.averageDays.coerceAtLeast(1)).coerceIn(0f,1f), false, topLeft = androidx.compose.ui.geometry.Offset(stroke,stroke), size = androidx.compose.ui.geometry.Size(size.width-2*stroke,size.height-2*stroke), style = androidx.compose.ui.graphics.drawscope.Stroke(stroke,cap = androidx.compose.ui.graphics.StrokeCap.Round))
+                    Button(onClick = onPeriod, modifier = Modifier.fillMaxWidth().heightIn(min = 54.dp), shape = RoundedCornerShape(28.dp)) {
+                        Icon(Icons.Outlined.AddCircleOutline, null); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.log_period))
+                    }
+                }
+            }
+        }
+        val recent = entries.filter { it.epochDay in today.minusDays(6).toEpochDay()..today.toEpochDay() }
+        Surface(shape = RoundedCornerShape(26.dp), color = c.secondaryContainer) {
+            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Text(t("Your last 7 days","آخر سبعة أيام","Seus últimos 7 dias"), style = MaterialTheme.typography.titleLarge)
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                    (6 downTo 0).forEach { offset ->
+                        val day = today.minusDays(offset.toLong())
+                        val entry = recent.firstOrNull { it.epochDay == day.toEpochDay() }
+                        Column(Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
+                            Box(Modifier.size(30.dp).background(if(entry != null) c.primary else c.surface, CircleShape), contentAlignment = Alignment.Center) {
+                                Text(day.dayOfMonth.toString(), color = if(entry != null) c.onPrimary else c.onSurface, style = MaterialTheme.typography.labelSmall)
+                            }
                         }
-                        Icon(Icons.Outlined.CalendarMonth, null, Modifier.size(34.dp), tint = Color.White)
                     }
                 }
-                if(prediction != null) {
-                    HorizontalDivider(color = Color.White.copy(alpha = .25f))
-                    Text("${DateText(prediction.earliest)} – ${DateText(prediction.latest)}", style = MaterialTheme.typography.titleMedium)
-                    Text(stringResource(R.string.prediction_note), style = MaterialTheme.typography.bodySmall, color = Color(0xFFD2E8D8))
-                }
-                Button(onClick = onPeriod, modifier = Modifier.fillMaxWidth().heightIn(min = 50.dp), colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE4F0DA), contentColor = Plum), shape = RoundedCornerShape(12.dp)) {
-                    Icon(Icons.Outlined.AddCircleOutline, null); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.log_period))
+                Text(t("Days logged: ","أيام مسجلة: ","Dias registados: ") + recent.map { it.epochDay }.distinct().size + "/7", style = MaterialTheme.typography.bodyMedium)
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    FilledTonalButton(onClick = onSymptom, modifier = Modifier.weight(1f)) { Text(t("Log today","سجلي اليوم","Registar hoje")) }
+                    OutlinedButton(onClick = onAtlas, modifier = Modifier.weight(1f)) { Text(t("Explore","استكشفي","Explorar")) }
                 }
             }
         }
@@ -184,19 +210,26 @@ import kotlin.math.roundToInt
 
 @Composable private fun DashboardTile(title: String, icon: androidx.compose.ui.graphics.vector.ImageVector, modifier: Modifier, action: () -> Unit) {
     val c = MaterialTheme.colorScheme
-    Surface(onClick = action, modifier = modifier.heightIn(min = 118.dp), shape = RoundedCornerShape(18.dp),
-        color = c.surface, border = BorderStroke(1.dp,c.outlineVariant)) {
-        Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Box(Modifier.size(40.dp).background(c.primaryContainer, RoundedCornerShape(12.dp)), contentAlignment = Alignment.Center) {
-                Icon(icon, null, tint = c.onPrimaryContainer, modifier = Modifier.size(23.dp))
+    val art = when(icon) {
+        Icons.Outlined.FavoriteBorder -> R.drawable.art_wellness
+        Icons.Outlined.CalendarToday, Icons.Outlined.Assignment -> R.drawable.art_calendar
+        Icons.Outlined.Insights -> R.drawable.art_insights
+        Icons.Outlined.DateRange -> R.drawable.art_fertility
+        else -> R.drawable.art_wellness
+    }
+    Surface(onClick = action, modifier = modifier, shape = RoundedCornerShape(24.dp), color = c.surface, border = BorderStroke(1.dp,c.outlineVariant)) {
+        Column {
+            Image(painterResource(art), null, Modifier.fillMaxWidth().height(100.dp), contentScale = ContentScale.Crop)
+            Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                Icon(icon, null, tint = c.primary, modifier = Modifier.size(20.dp))
+                Text(title, style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
             }
-            Text(title, style = MaterialTheme.typography.titleMedium)
         }
     }
 }
 
 @Composable fun CalendarScreen(periods: List<PeriodEntity>, entries: List<DailyEntryEntity>, vm: PeriodViewModel, onDay: (Long) -> Unit) {
-    var month by remember { mutableStateOf(YearMonth.now()) }
+    val initialMonth = remember { YearMonth.now() }
     val prediction = vm.prediction()
     val fertility = prediction?.let(CycleEngine::fertility)
     val recorded = remember(periods) { periods.flatMap { p ->
@@ -208,53 +241,68 @@ import kotlin.math.roundToInt
     val dailySet = entries.map { it.epochDay }.toSet()
     val config = LocalContext.current.resources.configuration
     val locale = androidx.core.os.ConfigurationCompat.getLocales(config).get(0) ?: Locale.UK
+    val c = MaterialTheme.colorScheme
+    val lang = wellnessLanguage()
+    fun t(en: String, ar: String, pt: String) = when(lang) { "ar" -> ar; "pt" -> pt; else -> en }
+    val firstWeekday = WeekFields.of(locale).firstDayOfWeek
+    val state = rememberCalendarState(startMonth = initialMonth.minusYears(8), endMonth = initialMonth.plusYears(3), firstVisibleMonth = initialMonth, firstDayOfWeek = firstWeekday)
+    val scope = rememberCoroutineScope()
+    var selected by remember { mutableStateOf(LocalDate.now()) }
+    var onlyLogged by remember { mutableStateOf(false) }
     ScreenColumn {
-        IllustratedHeader(stringResource(R.string.calendar), stringResource(R.string.prediction_note), R.drawable.art_calendar)
+        IllustratedHeader(stringResource(R.string.calendar), t("Swipe to explore your timeline","اسحبي لاستكشاف سجلك","Deslize para explorar seu histórico"), R.drawable.art_calendar)
         Panel {
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
-                IconButton(onClick = { month = month.minusMonths(1) }) { Icon(Icons.Outlined.ChevronLeft, null) }
-                Text(month.atDay(1).format(DateTimeFormatter.ofPattern("LLLL yyyy", locale)), style = MaterialTheme.typography.titleLarge)
-                IconButton(onClick = { month = month.plusMonths(1) }) { Icon(Icons.Outlined.ChevronRight, null) }
+                IconButton(onClick = { scope.launch { val m = state.firstVisibleMonth.yearMonth.minusMonths(1); if(!m.isBefore(initialMonth.minusYears(8))) state.animateScrollToMonth(m) } }) { Icon(Icons.Outlined.ChevronLeft, t("Previous month","الشهر السابق","Mês anterior")) }
+                Text(state.firstVisibleMonth.yearMonth.atDay(1).format(DateTimeFormatter.ofPattern("LLLL yyyy",locale)), style = MaterialTheme.typography.titleLarge)
+                IconButton(onClick = { scope.launch { val m = state.firstVisibleMonth.yearMonth.plusMonths(1); if(!m.isAfter(initialMonth.plusYears(3))) state.animateScrollToMonth(m) } }) { Icon(Icons.Outlined.ChevronRight, t("Next month","الشهر التالي","Próximo mês")) }
             }
-            val weekStart = WeekFields.of(locale).firstDayOfWeek
-            val days = (0..6).map { weekStart.plus(it.toLong()) }
-            Row(Modifier.fillMaxWidth()) { days.forEach { day ->
-                Text(day.getDisplayName(java.time.format.TextStyle.SHORT, locale), modifier = Modifier.weight(1f), textAlign = TextAlign.Center, style = MaterialTheme.typography.labelSmall)
-            } }
-            Spacer(Modifier.height(8.dp))
-            val offset = (month.atDay(1).dayOfWeek.value - weekStart.value + 7) % 7
-            val cells = (0 until ((offset + month.lengthOfMonth() + 6) / 7) * 7).map { it - offset + 1 }
-            cells.chunked(7).forEach { week ->
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(2.dp)) {
-                    week.forEach { day ->
-                        val current = if (day in 1..month.lengthOfMonth()) month.atDay(day) else null
-                        val recordedDay = current != null && current in recorded
-                        val estimated = current != null && prediction != null && !current.isBefore(prediction.earliest) && !current.isAfter(prediction.latest)
-                        val fertile = current != null && fertility != null && !current.isBefore(fertility.start) && !current.isAfter(fertility.end)
-                        val bg = when {
-                            recordedDay -> Rose
-                            fertile -> Lavender
-                            estimated -> Blush.copy(alpha = .7f)
-                            else -> Color.Transparent
-                        }
-                        Box(Modifier.weight(1f).aspectRatio(1f).padding(2.dp).clip(RoundedCornerShape(10.dp))
-                            .background(bg)
-                            .border(if (current == LocalDate.now()) 2.dp else 0.dp,
-                                if (current == LocalDate.now()) MaterialTheme.colorScheme.primary else Color.Transparent, RoundedCornerShape(10.dp))
-                            .clickable(enabled = current != null) { current?.let { onDay(it.toEpochDay()) } }, contentAlignment = Alignment.Center) {
-                            if (current != null) Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                Text(day.toString(), color = if (recordedDay) Color.White else if (fertile || estimated) Plum else MaterialTheme.colorScheme.onSurface,
-                                    fontWeight = if (current == LocalDate.now()) FontWeight.Bold else FontWeight.Normal)
-                                if (current.toEpochDay() in dailySet) Box(Modifier.size(4.dp).background(MaterialTheme.colorScheme.primary, CircleShape))
-                            }
-                        }
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                FilterChip(selected = onlyLogged, onClick = { onlyLogged = !onlyLogged }, label = { Text(t("Records only","السجلات فقط","Só registos")) })
+                TextButton(onClick = { selected = LocalDate.now(); scope.launch { state.animateScrollToMonth(initialMonth) } }) { Text(t("Today","اليوم","Hoje")) }
+            }
+            Row(Modifier.fillMaxWidth()) {
+                (0..6).map { firstWeekday.plus(it.toLong()) }.forEach { day ->
+                    Text(day.getDisplayName(java.time.format.TextStyle.SHORT,locale), modifier = Modifier.weight(1f), textAlign = TextAlign.Center, style = MaterialTheme.typography.labelSmall)
+                }
+            }
+            HorizontalCalendar(state = state, modifier = Modifier.fillMaxWidth(), dayContent = { day ->
+                val date = day.date
+                val inMonth = day.position == DayPosition.MonthDate
+                val isLogged = date.toEpochDay() in dailySet
+                val isRecorded = date in recorded
+                val isEstimate = !onlyLogged && prediction != null && !date.isBefore(prediction.earliest) && !date.isAfter(prediction.latest)
+                val isFertile = !onlyLogged && fertility != null && !date.isBefore(fertility.start) && !date.isAfter(fertility.end)
+                val bg = when {
+                    isRecorded -> Rose
+                    isEstimate -> Blush
+                    isFertile -> Lavender
+                    else -> Color.Transparent
+                }
+                Box(Modifier.aspectRatio(1f).padding(2.dp).clip(CircleShape).background(if(inMonth) bg else Color.Transparent)
+                    .border(if(inMonth && date == selected) 2.dp else 0.dp, if(inMonth && date == selected) c.primary else Color.Transparent, CircleShape)
+                    .clickable(enabled = inMonth) { selected = date }, contentAlignment = Alignment.Center) {
+                    if(inMonth) Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(date.dayOfMonth.toString(), color = if(isRecorded) Color.White else if(isEstimate || isFertile) Plum else c.onSurface, fontWeight = if(date == selected) FontWeight.Bold else FontWeight.Normal)
+                        if(isLogged) Box(Modifier.size(5.dp).background(if(isRecorded) Color.White else c.primary,CircleShape))
                     }
                 }
+            })
+        }
+        Surface(color = c.secondaryContainer, shape = RoundedCornerShape(26.dp)) {
+            Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(DateText(selected), style = MaterialTheme.typography.titleLarge)
+                val entry = entries.firstOrNull { it.epochDay == selected.toEpochDay() }
+                Text(if(entry == null) t("No symptoms recorded","لا توجد أعراض مسجلة","Sem sintomas registados") else t("Cramps: ","التقلصات: ","Cólicas: ") + entry.cramps + "/3")
+                if(selected in recorded) Text(stringResource(R.string.calendar_legend_period))
+                Button(onClick = { onDay(selected.toEpochDay()) }, modifier = Modifier.fillMaxWidth()) { Text(stringResource(R.string.log_symptoms)) }
             }
         }
         LegendDot(Rose, stringResource(R.string.calendar_legend_period))
-        LegendDot(Blush, stringResource(R.string.calendar_legend_estimate))
-        LegendDot(Lavender, stringResource(R.string.calendar_legend_fertile))
+        if(!onlyLogged) {
+            LegendDot(Blush, stringResource(R.string.calendar_legend_estimate))
+            LegendDot(Lavender, stringResource(R.string.calendar_legend_fertile))
+        }
         Notice(stringResource(R.string.fertility_warning))
     }
 }
