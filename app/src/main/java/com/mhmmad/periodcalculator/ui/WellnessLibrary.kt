@@ -63,7 +63,7 @@ fun WellnessLibrary() {
     var selected by remember { mutableIntStateOf(-1) }
     ScreenColumn {
         Panel {
-            Image(painterResource(R.drawable.lucide_flower), null, Modifier.size(54.dp))
+            Image(painterResource(R.drawable.lucide_flower), null, Modifier.size(54.dp), colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(MaterialTheme.colorScheme.primary))
             Text(t("Health library","المكتبة الصحية","Biblioteca de saúde"), style = MaterialTheme.typography.headlineMedium)
             Text(t("Four practical guides, available offline. Each includes its original medical source.","أربعة أدلة عملية تعمل دون إنترنت، مع رابط المصدر الطبي لكل دليل.","Quatro guias práticos disponíveis offline, com suas fontes médicas."))
         }

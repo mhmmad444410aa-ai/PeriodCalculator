@@ -31,8 +31,11 @@ fun WellnessStudio(entries: List<DailyEntryEntity>) {
             Text(t("Wellness atlas","أطلس العافية","Atlas de bem-estar"), style = MaterialTheme.typography.headlineMedium)
             Text(t("Explore your recorded patterns, not medical predictions.","استكشفي أنماط سجلاتك، وليس تنبؤات طبية.","Explore seus registros, não previsões médicas."))
             Canvas(Modifier.fillMaxWidth().height(100.dp)) {
-                val radius = size.height * .36f
-                repeat(5) { i -> drawCircle(ink.copy(alpha = .12f + i*.08f), radius = radius*(1f-i*.14f), center = center, style = Stroke(3.dp.toPx())) }
+                val stroke = 10.dp.toPx()
+                val r = size.height * .36f
+                drawCircle(track, r, center, style = Stroke(stroke))
+                val diameter = r*2
+                drawArc(ink, -90f, 360f*(values.size.toFloat()/window).coerceIn(0f,1f), false, topLeft = androidx.compose.ui.geometry.Offset(center.x-r,center.y-r), size = androidx.compose.ui.geometry.Size(diameter,diameter), style = Stroke(stroke,cap = androidx.compose.ui.graphics.StrokeCap.Round))
             }
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 listOf(30,90).forEach { n -> FilterChip(selected = window == n, onClick = { window = n }, label = { Text("$n "+t("days","يومًا","dias")) }) }
@@ -62,7 +65,7 @@ fun WellnessStudio(entries: List<DailyEntryEntity>) {
                     repeat(7-week.size) { Spacer(Modifier.weight(1f)) }
                 }
             }
-            Text(t("Pale grey: no record. Darker colour: greater recorded intensity.","الرمادي الفاتح: لا سجل. اللون الأغمق: شدة مسجلة أعلى.","Cinza claro: sem registro. Cor mais escura: maior intensidade registrada."))
+            Text(t("Neutral cells: no record. Darker colour: greater recorded intensity.","الرمادي الفاتح: لا سجل. اللون الأغمق: شدة مسجلة أعلى.","Cinza claro: sem registro. Cor mais escura: maior intensidade registrada."))
             if(values.isNotEmpty()) Text(t("Days with high intensity: ","أيام الشدة العالية: ","Dias de intensidade alta: ")+values.count { score(it)>=3 })
         }
         Panel {

@@ -50,24 +50,24 @@ import kotlin.math.roundToInt
     }
 }
 @Composable fun Panel(modifier: Modifier = Modifier, content: @Composable ColumnScope.() -> Unit) {
-    Surface(modifier.fillMaxWidth().shadow(3.dp, RoundedCornerShape(26.dp)),
-        shape = RoundedCornerShape(26.dp),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = .10f)),
+    Surface(modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(18.dp),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
         color = MaterialTheme.colorScheme.surface,
-        content = { Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(4.dp), content = content) })
+        content = { Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(9.dp), content = content) })
 }
 @Composable fun ScreenColumn(content: @Composable ColumnScope.() -> Unit) {
     Column(Modifier.fillMaxSize()
-        .background(Brush.verticalGradient(listOf(MaterialTheme.colorScheme.background, MaterialTheme.colorScheme.surfaceVariant.copy(alpha = .14f), MaterialTheme.colorScheme.background)))
-        .verticalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 12.dp),
+        .background(MaterialTheme.colorScheme.background)
+        .verticalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 14.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp), content = content)
 }
 @Composable fun Subheading(value: String) { Text(value, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold) }
 @Composable fun Stat(title: String, value: String, modifier: Modifier = Modifier) {
     Surface(modifier, shape = RoundedCornerShape(22.dp), color = MaterialTheme.colorScheme.surface,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = .12f)), shadowElevation = 2.dp) {
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = .12f)), shadowElevation = 0.dp) {
         Column(Modifier.padding(14.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-            Box(Modifier.size(width = 34.dp, height = 4.dp).background(Brush.horizontalGradient(listOf(Blush, Lavender)), RoundedCornerShape(8.dp)))
+            Box(Modifier.size(width = 34.dp, height = 4.dp).background(Brush.horizontalGradient(listOf(Pine, Lavender)), RoundedCornerShape(8.dp)))
             Spacer(Modifier.height(8.dp))
             Text(title, style = MaterialTheme.typography.labelMedium, textAlign = TextAlign.Center)
             Spacer(Modifier.height(6.dp))
@@ -123,63 +123,75 @@ import kotlin.math.roundToInt
     val today = LocalDate.now()
     val records = periods.map { PeriodRecord(it.id, LocalDate.ofEpochDay(it.startEpochDay), it.endEpochDay?.let(LocalDate::ofEpochDay)) }
     val currentDay = CycleEngine.currentCycleDay(records, today)
+    val lang = wellnessLanguage()
+    fun t(en: String, ar: String, pt: String) = when(lang) { "ar" -> ar; "pt" -> pt; else -> en }
+    val c = MaterialTheme.colorScheme
     ScreenColumn {
-        WellnessGateway(onAtlas, onLibrary)
-        CycleToolsEntry(onTools)
-        CycleJourneyCard(currentDay, prediction?.averageDays ?: 28)
-        if (prediction == null) {
-            FloralEmptyState(stringResource(R.string.no_data), stringResource(R.string.add_first), stringResource(R.string.log_period), onPeriod)
-        } else {
-            Box(Modifier.fillMaxWidth().clip(RoundedCornerShape(30.dp))
-                .background(Brush.linearGradient(listOf(Color(0xFFFFDDE9), Color(0xFFF4DFFD), Color(0xFFFFEBF0))))) {
-                Column(Modifier.fillMaxWidth().padding(18.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(stringResource(R.string.next_period), style = MaterialTheme.typography.titleMedium, color = Plum)
-                    if (prediction.confidence != Confidence.LOW && !prediction.isExtrapolated) {
-                        val until = CycleEngine.numberOfDaysUntil(prediction.nextStart, today)
-                        CycleProgressRing((currentDay ?: 1).toFloat() / prediction.averageDays.coerceAtLeast(1),
-                            stringResource(R.string.days_left), until.toString(), stringResource(R.string.cycle_label))
-                        Text(DateText(prediction.nextStart), style = MaterialTheme.typography.titleLarge, color = Plum, fontWeight = FontWeight.SemiBold)
-                    } else {
-                        Image(painter = androidx.compose.ui.res.painterResource(R.drawable.art_cycle), contentDescription = null, modifier = Modifier.size(110.dp))
-                        Text(stringResource(R.string.next_range), style = MaterialTheme.typography.titleLarge, color = Plum)
+        Text(DateText(today), style = MaterialTheme.typography.labelLarge, color = c.onSurfaceVariant)
+        Text(t("Your cycle, your rhythm","دورتك، إيقاعك","Seu ciclo, seu ritmo"), style = MaterialTheme.typography.headlineLarge)
+        Surface(color = Pine, contentColor = Color.White, shape = RoundedCornerShape(24.dp)) {
+            Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                    Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(5.dp)) {
+                        Text(stringResource(R.string.cycle_day), style = MaterialTheme.typography.labelLarge, color = Color(0xFFD2E8D8))
+                        Text(currentDay?.toString() ?: "—", style = MaterialTheme.typography.displayLarge, fontWeight = FontWeight.Bold)
+                        Text(if(prediction == null) t("Add your first period","سجّلي دورتك الأولى","Registre a primeira menstruação") else stringResource(R.string.next_period), style = MaterialTheme.typography.bodyMedium)
                     }
-                    Spacer(Modifier.height(8.dp))
-                    Text("${DateText(prediction.earliest)} — ${DateText(prediction.latest)}",
-                        style = MaterialTheme.typography.bodyMedium, color = Plum, textAlign = TextAlign.Center)
+                    Box(Modifier.size(100.dp), contentAlignment = Alignment.Center) {
+                        Canvas(Modifier.fillMaxSize()) {
+                            val stroke = 8.dp.toPx()
+                            drawCircle(Color.White.copy(alpha = .19f), radius = size.minDimension/2-stroke, style = androidx.compose.ui.graphics.drawscope.Stroke(stroke))
+                            if(currentDay != null && prediction != null) drawArc(Color(0xFFB9E4CC), -90f, 360f*(currentDay.toFloat()/prediction.averageDays.coerceAtLeast(1)).coerceIn(0f,1f), false, topLeft = androidx.compose.ui.geometry.Offset(stroke,stroke), size = androidx.compose.ui.geometry.Size(size.width-2*stroke,size.height-2*stroke), style = androidx.compose.ui.graphics.drawscope.Stroke(stroke,cap = androidx.compose.ui.graphics.StrokeCap.Round))
+                        }
+                        Icon(Icons.Outlined.CalendarMonth, null, Modifier.size(34.dp), tint = Color.White)
+                    }
+                }
+                if(prediction != null) {
+                    HorizontalDivider(color = Color.White.copy(alpha = .25f))
+                    Text("${DateText(prediction.earliest)} – ${DateText(prediction.latest)}", style = MaterialTheme.typography.titleMedium)
+                    Text(stringResource(R.string.prediction_note), style = MaterialTheme.typography.bodySmall, color = Color(0xFFD2E8D8))
+                }
+                Button(onClick = onPeriod, modifier = Modifier.fillMaxWidth().heightIn(min = 50.dp), colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE4F0DA), contentColor = Plum), shape = RoundedCornerShape(12.dp)) {
+                    Icon(Icons.Outlined.AddCircleOutline, null); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.log_period))
                 }
             }
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                Stat(stringResource(R.string.cycle_day), currentDay?.toString() ?: "—", Modifier.weight(1f))
-                Stat(stringResource(R.string.avg_cycle), "${prediction.averageDays}", Modifier.weight(1f))
-            }
-            if (prediction.confidence == Confidence.LOW || prediction.isExtrapolated) Notice(stringResource(R.string.irregular_warning))
         }
         Subheading(stringResource(R.string.log_today))
-        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-            FilledTonalButton(onClick = onPeriod, modifier = Modifier.weight(1f)) {
-                Icon(Icons.Outlined.AddCircleOutline, null); Spacer(Modifier.width(6.dp)); Text(stringResource(R.string.log_period))
-            }
-            FilledTonalButton(onClick = onSymptom, modifier = Modifier.weight(1f)) {
-                Icon(Icons.Outlined.FavoriteBorder, null); Spacer(Modifier.width(6.dp)); Text(stringResource(R.string.log_symptoms))
-            }
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            DashboardTile(stringResource(R.string.log_symptoms), Icons.Outlined.FavoriteBorder, Modifier.weight(1f), onSymptom)
+            DashboardTile(stringResource(R.string.history), Icons.Outlined.Assignment, Modifier.weight(1f), onHistory)
+        }
+        Subheading(t("Explore your health","استكشفي صحتك","Explore sua saúde"))
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            DashboardTile(t("Symptom atlas","أطلس الأعراض","Atlas de sintomas"), Icons.Outlined.Insights, Modifier.weight(1f), onAtlas)
+            DashboardTile(t("Health library","المكتبة الصحية","Biblioteca de saúde"), Icons.Outlined.Spa, Modifier.weight(1f), onLibrary)
+        }
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            DashboardTile(stringResource(R.string.tools_title), Icons.Outlined.CalendarToday, Modifier.weight(1f), onTools)
+            DashboardTile(stringResource(R.string.fertility), Icons.Outlined.DateRange, Modifier.weight(1f), onFertility)
         }
         Panel {
-            IllustratedInfoRow(R.drawable.art_insights, stringResource(R.string.recent_symptoms))
-            if (entries.isEmpty()) Text(stringResource(R.string.no_data))
-            entries.take(3).forEach { e ->
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Icon(Icons.Outlined.FavoriteBorder, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
-                    Text("${DateText(LocalDate.ofEpochDay(e.epochDay))}  •  ${stringResource(R.string.mood)} ${e.mood}/5  •  ${stringResource(R.string.cramps)} ${e.cramps}/3",
-                        style = MaterialTheme.typography.bodySmall)
-                }
+            Subheading(stringResource(R.string.recent_symptoms))
+            if(entries.isEmpty()) Text(stringResource(R.string.no_data), color = c.onSurfaceVariant)
+            entries.sortedByDescending { it.epochDay }.take(3).forEach { e ->
+                Text("${DateText(LocalDate.ofEpochDay(e.epochDay))}  ·  ${stringResource(R.string.cramps)} ${e.cramps}/3", style = MaterialTheme.typography.bodyMedium)
             }
         }
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            OutlinedButton(onClick = onHistory, modifier = Modifier.weight(1f)) { Text(stringResource(R.string.history)) }
-            OutlinedButton(onClick = onFertility, modifier = Modifier.weight(1f)) { Text(stringResource(R.string.fertility)) }
+        Notice(stringResource(R.string.medical_notice))
+        Spacer(Modifier.height(16.dp))
+    }
+}
+
+@Composable private fun DashboardTile(title: String, icon: androidx.compose.ui.graphics.vector.ImageVector, modifier: Modifier, action: () -> Unit) {
+    val c = MaterialTheme.colorScheme
+    Surface(onClick = action, modifier = modifier.heightIn(min = 118.dp), shape = RoundedCornerShape(18.dp),
+        color = c.surface, border = BorderStroke(1.dp,c.outlineVariant)) {
+        Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Box(Modifier.size(40.dp).background(c.primaryContainer, RoundedCornerShape(12.dp)), contentAlignment = Alignment.Center) {
+                Icon(icon, null, tint = c.onPrimaryContainer, modifier = Modifier.size(23.dp))
+            }
+            Text(title, style = MaterialTheme.typography.titleMedium)
         }
-        Notice(stringResource(R.string.prediction_note))
-        Spacer(Modifier.height(65.dp))
     }
 }
 
@@ -225,13 +237,13 @@ import kotlin.math.roundToInt
                             estimated -> Blush.copy(alpha = .7f)
                             else -> Color.Transparent
                         }
-                        Box(Modifier.weight(1f).aspectRatio(1f).padding(2.dp).clip(CircleShape)
+                        Box(Modifier.weight(1f).aspectRatio(1f).padding(2.dp).clip(RoundedCornerShape(10.dp))
                             .background(bg)
                             .border(if (current == LocalDate.now()) 2.dp else 0.dp,
-                                if (current == LocalDate.now()) MaterialTheme.colorScheme.primary else Color.Transparent, CircleShape)
+                                if (current == LocalDate.now()) MaterialTheme.colorScheme.primary else Color.Transparent, RoundedCornerShape(10.dp))
                             .clickable(enabled = current != null) { current?.let { onDay(it.toEpochDay()) } }, contentAlignment = Alignment.Center) {
                             if (current != null) Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                Text(day.toString(), color = if (recordedDay) Color.White else MaterialTheme.colorScheme.onSurface,
+                                Text(day.toString(), color = if (recordedDay) Color.White else if (fertile || estimated) Plum else MaterialTheme.colorScheme.onSurface,
                                     fontWeight = if (current == LocalDate.now()) FontWeight.Bold else FontWeight.Normal)
                                 if (current.toEpochDay() in dailySet) Box(Modifier.size(4.dp).background(MaterialTheme.colorScheme.primary, CircleShape))
                             }

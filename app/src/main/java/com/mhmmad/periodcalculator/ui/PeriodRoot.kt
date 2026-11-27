@@ -106,7 +106,7 @@ fun PeriodRoot(vm: PeriodViewModel, onUnlock: () -> Unit, canLock: () -> Boolean
             if (screen in tabs) {
                 Column {
                     if (screen == "home") BannerAdContainer(modifier = Modifier.fillMaxWidth())
-                    NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
+                    NavigationBar(containerColor = MaterialTheme.colorScheme.surface, tonalElevation = 0.dp) {
                     tabs.forEach { route ->
                         val icon = when(route) {
                             "home" -> Icons.Outlined.Home; "calendar" -> Icons.Outlined.CalendarMonth
@@ -120,9 +120,9 @@ fun PeriodRoot(vm: PeriodViewModel, onUnlock: () -> Unit, canLock: () -> Boolean
                             selected = screen == route, onClick = { go(route) },
                             icon = { Icon(icon, null) }, label = { Text(stringResource(label), style = MaterialTheme.typography.labelSmall) },
                             colors = NavigationBarItemDefaults.colors(
-                                selectedIconColor = MaterialTheme.colorScheme.primary,
+                                selectedIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
                                 selectedTextColor = MaterialTheme.colorScheme.primary,
-                                indicatorColor = MaterialTheme.colorScheme.primary.copy(alpha = .14f),
+                                indicatorColor = MaterialTheme.colorScheme.primaryContainer,
                                 unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
                                 unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant)
                         )
@@ -132,7 +132,7 @@ fun PeriodRoot(vm: PeriodViewModel, onUnlock: () -> Unit, canLock: () -> Boolean
             }
         },
         floatingActionButton = {
-            if (screen == "home" || screen == "calendar") {
+            if (screen == "calendar") {
                 FloatingActionButton(onClick = { editingId = 0; go("period") }, containerColor = MaterialTheme.colorScheme.primary) {
                     Icon(Icons.Outlined.Add, stringResource(R.string.log_period))
                 }
@@ -140,14 +140,14 @@ fun PeriodRoot(vm: PeriodViewModel, onUnlock: () -> Unit, canLock: () -> Boolean
         }
     ) { padding ->
         Box(Modifier.fillMaxSize().padding(padding)) {
-            NavHost(navController = nav, startDestination = if (prefs.onboarded) "home" else "onboarding") {
+            NavHost(navController = nav, startDestination = if (prefs.onboarded) "home" else "onboarding", enterTransition = { androidx.compose.animation.EnterTransition.None }, exitTransition = { androidx.compose.animation.ExitTransition.None }, popEnterTransition = { androidx.compose.animation.EnterTransition.None }, popExitTransition = { androidx.compose.animation.ExitTransition.None }) {
                 composable("onboarding") { OnboardingScreen(vm) { go("home") } }
                 composable("home") { HomeScreen(periods, entries, vm, onPeriod = { editingId = 0; go("period") },
                     onSymptom = { editingDay = java.time.LocalDate.now().toEpochDay(); go("symptoms") },
                     onHistory = { go("history") }, onFertility = { go("fertility") }, onTools = { go("tools") }, onAtlas = { go("studio") }, onLibrary = { go("library") }) }
                 composable("calendar") { CalendarScreen(periods, entries, vm) { day -> editingDay = day; go("symptoms") } }
                 composable("library") { WellnessLibrary() }
-                composable("studio") { Column { TextButton(onClick = { go("insights") }, modifier = Modifier.fillMaxWidth()) { Text(stringResource(R.string.insights)) }; Box(Modifier.weight(1f)) { WellnessStudio(entries) } } }
+                composable("studio") { Column { FilledTonalButton(onClick = { go("insights") }, modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp)) { Text(stringResource(R.string.insights)) }; Box(Modifier.weight(1f)) { WellnessStudio(entries) } } }
                 composable("insights") { InsightsScreen(periods, entries, vm, onHistory = { go("history") },
                     onFertility = { go("fertility") }, onReview = { go("review") }, onTools = { go("tools") }) }
                 composable("tools") { CycleToolsHome { go(it) } }
