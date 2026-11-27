@@ -37,7 +37,7 @@ jobs:
           test -f project/settings.gradle.kts
       - name: Set up Java 17
         if: steps.source.outputs.exists == 'true'
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: '17'
