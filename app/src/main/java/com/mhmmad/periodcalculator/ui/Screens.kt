@@ -89,7 +89,7 @@ import kotlin.math.roundToInt
     var date by remember { mutableStateOf(LocalDate.now().minusDays(7)) }
     var cycle by remember { mutableFloatStateOf(28f) }
     var bleeding by remember { mutableFloatStateOf(5f) }
-    var addInitial by remember { mutableStateOf(true) }
+    var addInitial by remember { mutableStateOf(false) }
     ScreenColumn {
         IllustratedHeader(stringResource(R.string.welcome), stringResource(R.string.onboarding_message), R.drawable.art_wellness)
         Notice(stringResource(R.string.local_data))
