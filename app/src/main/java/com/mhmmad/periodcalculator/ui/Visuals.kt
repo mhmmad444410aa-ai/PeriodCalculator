@@ -39,20 +39,12 @@ fun IllustratedHeader(
     modifier: Modifier = Modifier
 ) {
     val c = MaterialTheme.colorScheme
-    val symbol = when(imageId) {
-        R.drawable.art_calendar -> Icons.Outlined.CalendarMonth
-        R.drawable.art_insights -> Icons.Outlined.Insights
-        R.drawable.art_fertility -> Icons.Outlined.FavoriteBorder
-        else -> Icons.Outlined.Spa
-    }
-    Surface(modifier.fillMaxWidth(), color = c.primaryContainer, shape = RoundedCornerShape(20.dp)) {
-        Row(Modifier.padding(18.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+    Surface(modifier.fillMaxWidth(), color = c.primaryContainer, shape = RoundedCornerShape(30.dp)) {
+        Column {
+            Image(painterResource(imageId), null, modifier = Modifier.fillMaxWidth().height(156.dp), contentScale = ContentScale.Crop)
+            Column(Modifier.padding(horizontal = 20.dp, vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 Text(title, style = MaterialTheme.typography.headlineMedium, color = c.onPrimaryContainer)
                 Text(description, style = MaterialTheme.typography.bodyMedium, color = c.onPrimaryContainer)
-            }
-            Box(Modifier.size(60.dp).background(c.surface, RoundedCornerShape(18.dp)), contentAlignment = Alignment.Center) {
-                Icon(symbol, null, Modifier.size(32.dp), tint = c.primary)
             }
         }
     }
@@ -62,7 +54,7 @@ fun IllustratedHeader(
 fun FloralEmptyState(title: String, message: String, action: String, onClick: () -> Unit) {
     Surface(shape = RoundedCornerShape(28.dp), color = MaterialTheme.colorScheme.surface, border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = .1f))) {
         Column(Modifier.fillMaxWidth().padding(18.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Icon(Icons.Outlined.CalendarMonth, null, Modifier.size(64.dp), tint = MaterialTheme.colorScheme.primary)
+            Image(painterResource(R.drawable.art_calendar), null, Modifier.fillMaxWidth().height(132.dp).clip(RoundedCornerShape(18.dp)), contentScale = ContentScale.Crop)
             Text(title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
             Text(message, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Spacer(Modifier.height(6.dp))
@@ -102,7 +94,7 @@ fun SymptomLevelRow(label: String, @DrawableRes iconId: Int, value: Float, max: 
     Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             Box(Modifier.size(42.dp).background(Brush.linearGradient(listOf(Blush.copy(alpha = .45f), Lavender.copy(alpha = .4f))), CircleShape), contentAlignment = Alignment.Center) {
-                Icon(when(iconId) { R.drawable.symptom_cramps -> Icons.Outlined.FavoriteBorder; R.drawable.symptom_headache -> Icons.Outlined.Info; R.drawable.symptom_fatigue -> Icons.Outlined.Bolt; R.drawable.symptom_mood -> Icons.Outlined.SentimentSatisfied; else -> Icons.Outlined.Spa }, null, Modifier.size(24.dp), tint = Pine)
+                Image(painterResource(iconId), null, Modifier.size(36.dp), contentScale = ContentScale.Fit)
             }
             Text(label, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f), fontWeight = FontWeight.Medium)
             Text("${value.toInt()} / ${max.toInt()}", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
@@ -116,7 +108,7 @@ fun SymptomLevelRow(label: String, @DrawableRes iconId: Int, value: Float, max: 
 @Composable
 fun IllustratedInfoRow(@DrawableRes imageId: Int, text: String) {
     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-        Icon(Icons.Outlined.Insights, null, Modifier.size(32.dp), tint = MaterialTheme.colorScheme.primary)
+        Image(painterResource(imageId), null, Modifier.size(64.dp).clip(RoundedCornerShape(16.dp)), contentScale = ContentScale.Crop)
         Text(text, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.weight(1f))
     }
 }
