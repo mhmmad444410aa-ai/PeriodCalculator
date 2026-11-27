@@ -118,13 +118,13 @@ import kotlin.math.roundToInt
 }
 
 @Composable fun HomeScreen(periods: List<PeriodEntity>, entries: List<DailyEntryEntity>, vm: PeriodViewModel,
-                       onPeriod: () -> Unit, onSymptom: () -> Unit, onHistory: () -> Unit, onFertility: () -> Unit, onTools: () -> Unit) {
+                       onPeriod: () -> Unit, onSymptom: () -> Unit, onHistory: () -> Unit, onFertility: () -> Unit, onTools: () -> Unit, onAtlas: () -> Unit, onLibrary: () -> Unit) {
     val prediction = vm.prediction()
     val today = LocalDate.now()
     val records = periods.map { PeriodRecord(it.id, LocalDate.ofEpochDay(it.startEpochDay), it.endEpochDay?.let(LocalDate::ofEpochDay)) }
     val currentDay = CycleEngine.currentCycleDay(records, today)
     ScreenColumn {
-        IllustratedHeader(stringResource(R.string.recent_note), stringResource(R.string.prediction_note), R.drawable.art_wellness)
+        WellnessGateway(onAtlas, onLibrary)
         CycleToolsEntry(onTools)
         CycleJourneyCard(currentDay, prediction?.averageDays ?: 28)
         if (prediction == null) {
