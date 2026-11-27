@@ -82,7 +82,7 @@ fun PeriodRoot(vm: PeriodViewModel, onUnlock: () -> Unit, canLock: () -> Boolean
                     title = {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             if (screen == "home") Icon(Icons.Outlined.Spa, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(23.dp))
-                            Text(stringResource(titleId), style = MaterialTheme.typography.titleLarge,
+                            Text(if (screen == "library") { when(wellnessLanguage()) { "ar" -> "المكتبة الصحية"; "pt" -> "Biblioteca de saúde"; else -> "Health library" } } else stringResource(titleId), style = MaterialTheme.typography.titleLarge,
                                 maxLines = 1, overflow = TextOverflow.Ellipsis)
                         }
                     },
@@ -144,8 +144,9 @@ fun PeriodRoot(vm: PeriodViewModel, onUnlock: () -> Unit, canLock: () -> Boolean
                 composable("onboarding") { OnboardingScreen(vm) { go("home") } }
                 composable("home") { HomeScreen(periods, entries, vm, onPeriod = { editingId = 0; go("period") },
                     onSymptom = { editingDay = java.time.LocalDate.now().toEpochDay(); go("symptoms") },
-                    onHistory = { go("history") }, onFertility = { go("fertility") }, onTools = { go("tools") }) }
+                    onHistory = { go("history") }, onFertility = { go("fertility") }, onTools = { go("tools") }, onAtlas = { go("studio") }, onLibrary = { go("library") }) }
                 composable("calendar") { CalendarScreen(periods, entries, vm) { day -> editingDay = day; go("symptoms") } }
+                composable("library") { WellnessLibrary() }
                 composable("studio") { Column { TextButton(onClick = { go("insights") }, modifier = Modifier.fillMaxWidth()) { Text(stringResource(R.string.insights)) }; Box(Modifier.weight(1f)) { WellnessStudio(entries) } } }
                 composable("insights") { InsightsScreen(periods, entries, vm, onHistory = { go("history") },
                     onFertility = { go("fertility") }, onReview = { go("review") }, onTools = { go("tools") }) }
