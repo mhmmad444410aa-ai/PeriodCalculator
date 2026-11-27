@@ -44,13 +44,13 @@ jobs:
           yes | "$SDKMANAGER" --licenses >/dev/null || true
           "$SDKMANAGER" 'platforms;android-36' 'build-tools;36.0.0' 'platform-tools'
       - name: Prepare Gradle 8.13
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v6
         with:
           gradle-version: '8.13'
       - name: Bootstrap official Gradle wrapper
         run: gradle wrapper --gradle-version 8.13 --distribution-type bin
       - name: Validate official Gradle wrapper
-        uses: gradle/actions/wrapper-validation@v4
+        uses: gradle/actions/wrapper-validation@v6
       - name: Test and build offline debug APK
         run: ./gradlew --stacktrace --warning-mode all :app:testOfflineDebugUnitTest :app:assembleOfflineDebug
       - name: Test APK exists
